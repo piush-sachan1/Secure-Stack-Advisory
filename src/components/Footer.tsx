@@ -133,6 +133,16 @@ export const Footer: React.FC<FooterProps> = ({ onSelectServiceTitle, onNavigate
               <li>
                 <button
                   type="button"
+                  onClick={() => onNavigateSection('compliance-tracker')}
+                  className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1"
+                >
+                  SOC 2 & ISO 27001 Tracker
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
                   onClick={() => onNavigateSection('process')}
                   className="hover:text-white transition-colors text-left"
                 >

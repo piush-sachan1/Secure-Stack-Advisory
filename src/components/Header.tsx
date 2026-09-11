@@ -24,6 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ onBookClick }) => {
     { label: 'FinOps', href: '#finops-optimization', badge: 'ROI' },
     { label: 'Practices', href: '#practices' },
     { label: 'Risk Snapshot', href: '#risk-assessment', badge: 'AI Tool' },
+    { label: 'Compliance Tracker', href: '#compliance-tracker', badge: 'SOC2 · ISO' },
     { label: 'Services', href: '#services' },
     { label: 'Process', href: '#process' },
     { label: 'Insights', href: '#insights' },

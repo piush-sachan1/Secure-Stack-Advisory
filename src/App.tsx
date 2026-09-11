@@ -7,6 +7,7 @@ import { FinOpsSection } from './components/FinOpsSection';
 import { PracticesOverview } from './components/PracticesOverview';
 import { FocusAreas } from './components/FocusAreas';
 import { RiskAssessmentTool } from './components/RiskAssessmentTool';
+import { ComplianceTracker } from './components/ComplianceTracker';
 import { ServicesGrid } from './components/ServicesGrid';
 import { ServiceDetailModal } from './components/ServiceDetailModal';
 import { TeamSection } from './components/TeamSection';
@@ -137,6 +138,9 @@ export default function App() {
             setPrefilledConsultation(data);
           }}
         />
+
+        {/* SOC 2 & ISO 27001 Compliance Tracker with Progress Rings */}
+        <ComplianceTracker onOpenConsultation={handleOpenConsultationTopic} />
 
         {/* Services Grid (6–8 Cards + Full Detail Modal) */}
         <ServicesGrid
