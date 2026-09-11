@@ -1,0 +1,6 @@
+{
+  "name": "SecureStack Advisory",
+  "description": "Engineering-first cloud & security consultancy specializing in Multi-Cloud (AWS, GCP, Azure), 24/7 SRE, Agile DevOps, Enterprise FinOps, and AI Security.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
