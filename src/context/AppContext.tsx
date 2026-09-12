@@ -21,28 +21,33 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-const LANGUAGE_STORAGE_KEY = 'securestack_advisory_lang';
-const SOCIALS_STORAGE_KEY = 'securestack_advisory_socials';
-const THEME_STORAGE_KEY = 'securestack_advisory_theme';
+const LANGUAGE_STORAGE_KEY = 'vectorbound_lang';
+const SOCIALS_STORAGE_KEY = 'vectorbound_socials';
+const THEME_STORAGE_KEY = 'vectorbound_theme';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Temporary Theme state with persistence
+  // Theme state defaulting to Graphite & Pure Indigo ('slate-corporate')
   const [theme, setThemeState] = useState<SiteTheme>(() => {
     try {
       const saved = localStorage.getItem(THEME_STORAGE_KEY);
       if (
+        saved === 'slate-corporate' ||
         saved === 'cyber-obsidian' ||
         saved === 'deep-navy' ||
         saved === 'emerald-matrix' ||
         saved === 'obsidian-gold' ||
+        saved === 'nordic-frost' ||
+        saved === 'amethyst-stealth' ||
+        saved === 'crimson-sentinel' ||
+        saved === 'swiss-minimal' ||
         saved === 'light-titanium'
       ) {
-        return saved;
+        return saved as SiteTheme;
       }
     } catch {
       // ignore
     }
-    return 'cyber-obsidian';
+    return 'slate-corporate';
   });
 
   const [isThemeSandboxOpen, setIsThemeSandboxOpen] = useState(false);

@@ -14,9 +14,11 @@ import {
   Server,
   RefreshCw,
 } from 'lucide-react';
+import { ComplianceTrackerSkeleton } from './ThemedSkeleton';
 
 interface ComplianceTrackerProps {
   onOpenConsultation?: (topic?: string) => void;
+  isLoading?: boolean;
 }
 
 interface ControlItem {
@@ -224,7 +226,7 @@ const INITIAL_CONTROLS: ControlItem[] = [
   },
 ];
 
-export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenConsultation }) => {
+export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenConsultation, isLoading = false }) => {
   const [activeTab, setActiveTab] = useState<'all' | 'soc2' | 'iso27001'>('all');
   const [controls, setControls] = useState<ControlItem[]>(INITIAL_CONTROLS);
   const [statusFilter, setStatusFilter] = useState<'all' | 'passed' | 'in_progress' | 'gap'>('all');
@@ -449,8 +451,12 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
           </div>
         </div>
 
-        {/* Primary Standards Rings Grid (SOC 2 vs ISO 27001 vs Combined) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
+        {isLoading ? (
+          <ComplianceTrackerSkeleton />
+        ) : (
+          <>
+            {/* Primary Standards Rings Grid (SOC 2 vs ISO 27001 vs Combined) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
           {/* Card 1: SOC 2 Type II */}
           <div
             id="card-soc2-progress"
@@ -1056,6 +1062,8 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               </div>
             </div>
           </div>
+        )}
+        </>
         )}
       </div>
     </section>

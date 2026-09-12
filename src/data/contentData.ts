@@ -4,6 +4,7 @@ import {
   ConsultantProfile,
   ProcessStage,
   InsightPost,
+  CaseStudy,
   CloudPlatformSpec,
   DevOpsAgilePractice,
   FinOpsOptimizationItem,
@@ -19,42 +20,42 @@ import {
 export const DEFAULT_SOCIAL_CHANNELS: SocialChannelsConfig = {
   x: {
     id: 'x',
-    name: '@SecureStackSec',
-    url: 'https://x.com/SecureStackSec',
+    name: '@VectorboundSec',
+    url: 'https://x.com/VectorboundSec',
     description: 'Real-time CVE threat alerts, cloud incident teardowns & live architecture threads',
     badge: '34.2K Followers',
   },
   instagram: {
     id: 'instagram',
-    name: '@securestack.cyber',
-    url: 'https://instagram.com/securestack.cyber',
+    name: '@vectorbound.cyber',
+    url: 'https://instagram.com/vectorbound.cyber',
     description: 'Field notes, zero-day alerts & behind-the-scenes engineering',
     badge: '18.4K Followers',
   },
   facebook: {
     id: 'facebook',
-    name: 'SecureStack Advisory Group',
-    url: 'https://facebook.com/securestack.advisory',
+    name: 'Vectorbound Advisory Group',
+    url: 'https://facebook.com/vectorbound.advisory',
     description: 'Executive briefings, enterprise webinars & regulatory updates',
     badge: 'Official Page',
   },
   youtube: {
     id: 'youtube',
-    name: '@SecureStackArchitecture',
-    url: 'https://youtube.com/@SecureStackArchitecture',
+    name: '@VectorboundArchitecture',
+    url: 'https://youtube.com/@VectorboundArchitecture',
     description: 'Deep-dive architectural teardowns & live adversarial exploits',
     badge: '42K Subscribers',
   },
 };
 
 export const COMPANY_INFO = {
-  name: "SecureStack Advisory",
+  name: "Vectorbound",
   tagline: "Engineering-First Security for Modern Cloud & AI Architectures",
   heroSubtitle: "We evaluate the architecture you actually shipped — identifying exploitable flaws in AI systems, cloud infrastructure, and software delivery pipelines before adversaries do.",
-  email: "advisory@securestack.io",
-  phone: "+1 (415) 890-4128",
+  email: "advisory@vectorbound.io",
+  phone: "+1 (800) 555-0199",
   pgpKeyId: "4A9E 810C 2B77 D30F 99E1",
-  locations: ["San Francisco, CA", "New York, NY", "London, UK", "Frankfurt, DE"],
+  locations: ["100 Enterprise Way, Suite 400, San Francisco, CA 94105 (Dummy HQ)", "New York, NY", "London, UK", "Frankfurt, DE"],
   foundedYear: "2019",
   socials: DEFAULT_SOCIAL_CHANNELS,
 };
@@ -417,57 +418,63 @@ export const SERVICES_LIST: ServiceDetail[] = [
   {
     id: "aws-architecture",
     practiceId: "cloud-security",
-    title: "Cloud Security (AWS & GCP)",
-    tagline: "Deep audit of cloud architecture, IAM privilege reduction, network segmentation, and telemetry posture.",
-    shortDescription: "Eliminate cloud misconfiguration, identity sprawl, and compliance drift across multi-account AWS and GCP environments.",
-    problem: "Modern cloud environments suffer from severe identity sprawl: hundreds of orphaned IAM roles, over-permissive wildcard permissions, and unmonitored cross-account STS trust relationships. Combined with configuration drift and blind spots in telemetry, single compromised credentials often grant adversaries unimpeded lateral movement across cloud environments.",
+    title: "Multi-Cloud Architecture (AWS, Azure & GCP)",
+    tagline: "Deep audit of cloud architecture, IAM privilege reduction, landing zones, and telemetry posture across hyperscalers.",
+    shortDescription: "Eliminate cloud misconfiguration, identity sprawl, and compliance drift across multi-account AWS, Azure, and GCP environments.",
+    problem: "Modern enterprise cloud environments suffer from severe identity sprawl: hundreds of orphaned IAM roles, over-permissive wildcard policies, unmonitored cross-account trusts, and unsegmented Entra ID (Azure AD) app registrations. Single compromised credentials often grant adversaries unimpeded lateral movement across hyperscalers.",
     methodology: [
       {
         phase: "Phase 1: Well-Architected Cloud Review",
-        description: "Conduct systematic baseline audits of AWS Organizations, GCP Organization hierarchy, Service Control Policies (SCPs), and landing zone isolation.",
+        description: "Conduct systematic baseline audits of AWS Control Tower, Azure CAF Landing Zones, GCP Organization hierarchy, Service Control Policies (SCPs), and Azure Policy initiatives.",
       },
       {
-        phase: "Phase 2: IAM Least-Privilege Enforcement",
-        description: "Analyze transitive permission graphs to strip wildcard policies, revoke dormant credentials, and transition to short-lived Workload Identity federation.",
+        phase: "Phase 2: IAM & Identity Governance",
+        description: "Analyze transitive permission graphs to strip wildcard policies, revoke dormant credentials, enforce Entra ID PIM time-bound activations, and transition to short-lived Workload Identity / Managed Identities.",
       },
       {
         phase: "Phase 3: Network Segmentation & Zero-Trust Egress",
-        description: "Implement micro-segmentation, Transit Gateway routing, and VPC Service Controls (VPC-SC) to prevent data exfiltration during container compromise.",
+        description: "Implement micro-segmentation, Transit Gateway / Azure Virtual WAN hub-spoke routing, and VPC Service Controls / Private Endpoints to prevent data exfiltration during compute compromise.",
       },
       {
         phase: "Phase 4: Continuous Posture Monitoring & Telemetry",
-        description: "Tune GuardDuty, Security Hub, and Cloud Security Command Center with automated alerting tested against simulated adversary actions.",
+        description: "Tune GuardDuty, Security Hub, Microsoft Defender for Cloud, Microsoft Sentinel, and GCP Security Command Center with automated alerting tested against simulated adversary actions.",
       },
     ],
     deliverables: [
-      "Comprehensive Architecture Security Assessment with visual IAM trust escalation graphs",
-      "IAM Policy Overhaul & Privilege Reduction Map stripping wildcard permissions",
-      "Production-Ready Terraform / OpenTofu IaC Templates for hardened landing zones",
+      "Comprehensive Multi-Cloud Architecture Security Assessment with visual IAM trust escalation graphs",
+      "IAM & Entra ID Policy Overhaul & Privilege Reduction Map stripping wildcard permissions",
+      "Production-Ready Terraform / Bicep / OpenTofu IaC Templates for hardened landing zones",
       "Prioritized 90-Day Cloud Remediation Roadmap with step-by-step implementation milestones",
     ],
     faq: [
       {
-        question: "Do you require root or administrative access to our production AWS or GCP environments?",
-        answer: "No. We utilize strictly scoped, read-only audit roles (such as AWS SecurityAudit and Google Cloud Viewer) with zero write permissions and no access to customer payload data.",
+        question: "Do you require administrative access to our production AWS, Azure, or GCP environments?",
+        answer: "No. We utilize strictly scoped, read-only audit roles (such as AWS SecurityAudit, Azure Reader, and Google Cloud Viewer) with zero write permissions and no access to customer payload data.",
+      },
+      {
+        question: "How do you handle Microsoft Azure Entra ID (Azure AD) identity governance?",
+        answer: "We audit tenant-wide App Registrations, service principal secret rotation, Privileged Identity Management (PIM) just-in-time activations, and Conditional Access policies.",
       },
       {
         question: "How do you ensure IAM policy pruning doesn't cause outages for active workloads?",
-        answer: "We analyze historical CloudTrail and GCP Access Transparency logs over a 90-day window to calculate actual runtime API usage before applying least-privilege boundaries, testing policies in staging first.",
+        answer: "We analyze historical CloudTrail, Azure Activity Logs, and GCP Access Transparency logs over a 90-day window to calculate actual runtime API usage before applying least-privilege boundaries.",
       },
       {
         question: "What cloud security posture management (CSPM) and detection tools do you evaluate?",
-        answer: "We audit and configure native tools (AWS GuardDuty, AWS Security Hub, GCP SCC Premium) as well as commercial CSPMs (Wiz, Orca, Prisma Cloud) to ensure high-fidelity detection rules without alert fatigue.",
-      },
-      {
-        question: "Can you help us remediate findings directly via Terraform or OpenTofu pull requests?",
-        answer: "Yes. Our principals author production-tested Terraform and OpenTofu modules ready for your engineering team to review and merge through normal CI/CD pipelines.",
+        answer: "We audit native tools (AWS GuardDuty, Microsoft Defender for Cloud, GCP SCC Premium) as well as commercial CSPMs (Wiz, Orca, Prisma Cloud) to ensure high-fidelity detection rules without alert fatigue.",
       },
     ],
     relatedServices: [
       {
+        id: "azure-security",
+        title: "Azure Security & Entra ID Governance",
+        tagline: "CAF Landing Zones, Entra PIM, and Microsoft Defender for Cloud.",
+        practice: "Cloud Security",
+      },
+      {
         id: "kubernetes-security",
         title: "Kubernetes & Container Hardening",
-        tagline: "Cluster hardening for EKS, GKE, and container runtime isolation.",
+        tagline: "Cluster hardening for EKS, GKE, and private Azure AKS.",
         practice: "Cloud Security",
       },
       {
@@ -476,14 +483,8 @@ export const SERVICES_LIST: ServiceDetail[] = [
         tagline: "Automated pipeline security gates and CI/CD supply chain hardening.",
         practice: "DevSecOps",
       },
-      {
-        id: "vciso-advisory",
-        title: "Advisory & Compliance",
-        tagline: "Pragmatic vCISO guidance, SOC 2 / ISO 27001 readiness, and audit packs.",
-        practice: "Advisory",
-      },
     ],
-    tags: ["AWS Organizations", "GCP VPC-SC", "IAM Graphs", "Terraform", "Well-Architected"],
+    tags: ["AWS Control Tower", "Azure CAF", "GCP VPC-SC", "Entra ID PIM", "Terraform / Bicep"],
   },
   {
     id: "gcp-security",
@@ -525,50 +526,103 @@ export const SERVICES_LIST: ServiceDetail[] = [
     relatedServices: [
       {
         id: "aws-architecture",
-        title: "Cloud Security (AWS & GCP)",
+        title: "Multi-Cloud Architecture (AWS, Azure & GCP)",
         tagline: "Multi-account governance, IAM graph analysis, and landing zone hardening.",
         practice: "Cloud Security",
       },
       {
-        id: "kubernetes-security",
-        title: "Kubernetes & Container Hardening",
-        tagline: "GKE cluster isolation, Cilium network policies, and runtime defense.",
+        id: "azure-security",
+        title: "Azure Security & Entra ID Governance",
+        tagline: "CAF Landing Zones, Entra PIM, and Microsoft Defender for Cloud.",
         practice: "Cloud Security",
       },
     ],
     tags: ["VPC Service Controls", "GCP Org Policies", "BigQuery IAM", "Workload Identity"],
   },
   {
+    id: "azure-security",
+    practiceId: "cloud-security",
+    title: "Azure Enterprise Security & Entra ID Governance",
+    tagline: "Cloud Adoption Framework (CAF) Landing Zones, Entra ID PIM, and Microsoft Defender for Cloud.",
+    shortDescription: "Hardening Azure Management Groups, securing Entra ID privileged access, and configuring zero-trust network perimeters.",
+    problem: "Azure enterprise environments often suffer from over-privileged Subscription Owner assignments, long-lived client secrets in App Registrations, unsegmented vNets, and misconfigured Microsoft Defender alerts.",
+    methodology: [
+      { phase: "CAF & Governance Audit", description: "Evaluate Azure Management Group hierarchies, Azure Policy initiatives, and RBAC role assignments." },
+      { phase: "Entra ID Zero-Trust", description: "Enforce Privileged Identity Management (PIM) time-bound activations, Conditional Access, and Managed Identity migration." },
+      { phase: "vNet & Egress Control", description: "Design Azure Firewall Premium, Private Endpoints, and User Defined Routes (UDR) to eliminate public IP exposure." },
+      { phase: "SIEM & CSPM Optimization", description: "Tune Microsoft Defender for Cloud, Log Analytics workspaces, and Sentinel SOAR automation playbooks." },
+    ],
+    deliverables: [
+      "Azure Enterprise Landing Zone Architecture Blueprint (Bicep / Terraform)",
+      "Entra ID PIM Just-In-Time (JIT) Privilege Elevation Blueprint",
+      "Microsoft Defender for Cloud Regulatory Compliance Dashboard Tuning",
+      "Zero-Trust Private Link & Firewall Routing Matrix",
+    ],
+    faq: [
+      {
+        question: "How do you eliminate static client secrets in Azure App Registrations?",
+        answer: "We transition compute instances and CI/CD pipelines to Azure Managed Identities (System-Assigned or User-Assigned) and federated OIDC credentials.",
+      },
+      {
+        question: "Can Azure PIM be integrated with existing ITSM workflows (e.g., ServiceNow, Jira)?",
+        answer: "Yes. We configure Entra PIM activation policies requiring ticket reference numbers and manager approvals before elevated permissions are granted.",
+      },
+      {
+        question: "Do you audit Azure OpenAI Service deployment security?",
+        answer: "Yes. We evaluate private endpoint isolation, Key Vault secret caching, content filtering policies, and Managed Identity access to vector stores.",
+      },
+      {
+        question: "What compliance standards can Azure Policy enforce automatically?",
+        answer: "We deploy Azure Policy initiatives enforcing CIS Azure Benchmarks, HIPAA, SOC 2, and sovereign data location restrictions across all subscriptions.",
+      },
+    ],
+    relatedServices: [
+      {
+        id: "aws-architecture",
+        title: "Multi-Cloud Architecture (AWS, Azure & GCP)",
+        tagline: "Multi-account governance, IAM graph analysis, and landing zone hardening.",
+        practice: "Cloud Security",
+      },
+      {
+        id: "kubernetes-security",
+        title: "Kubernetes & Container Hardening",
+        tagline: "Cluster hardening for EKS, GKE, and private Azure AKS.",
+        practice: "Cloud Security",
+      },
+    ],
+    tags: ["Azure CAF", "Entra ID PIM", "Defender for Cloud", "Azure Firewall", "Managed Identities"],
+  },
+  {
     id: "kubernetes-security",
     practiceId: "cloud-security",
     title: "Kubernetes & Container Hardening",
-    tagline: "Cluster hardening for EKS, GKE, and self-managed Kubernetes platforms.",
-    shortDescription: "Auditing admission controllers, network policies, runtime telemetry (Falco), and container escape vectors.",
+    tagline: "Cluster hardening for EKS, GKE, private Azure AKS, and container runtime isolation.",
+    shortDescription: "Auditing admission controllers, Cilium / Azure CNI network policies, runtime telemetry (Falco), and container escape vectors.",
     problem: "Default Kubernetes installations allow pods to communicate uninhibited across namespaces and access instance metadata services (IMDS), enabling container breakouts to compromise the entire cloud account.",
     methodology: [
-      { phase: "Control Plane Audit", description: "Review API server flags, etcd encryption, and cluster RBAC assignments." },
+      { phase: "Control Plane Audit", description: "Review API server flags, etcd encryption, cluster RBAC assignments, and cloud provider IAM integration." },
       { phase: "Workload Policy", description: "Deploy Kyverno / Gatekeeper policies enforcing read-only root filesystems and non-root users." },
-      { phase: "Network Microsegmentation", description: "Implement Calico or Cilium network policies blocking unauthenticated east-west traffic." },
+      { phase: "Network Microsegmentation", description: "Implement Calico, Cilium, or Azure CNI network policies blocking unauthenticated east-west traffic." },
       { phase: "Runtime Defense", description: "Deploy eBPF-powered runtime detection (Falco/Tetragon) to intercept unauthorized shell spawns." },
     ],
     deliverables: [
       "Production-tested Kyverno / OPA policy definitions",
-      "IMDSv2 and metadata endpoint isolation manifests",
+      "IMDSv2 and cloud metadata endpoint isolation manifests",
       "RBAC privilege reduction audit log and service account maps",
       "eBPF runtime security detection rules for zero-day container escapes",
     ],
     faq: [
       {
-        question: "Does this apply to managed services like EKS and GKE?",
-        answer: "Yes. Managed control planes handle master node uptime, but leave 80% of cluster security (pod security standards, network policies, node IAM roles) in your hands.",
+        question: "Does this apply to managed services like EKS, GKE, and Azure AKS?",
+        answer: "Yes. Managed control planes handle master node uptime, but leave 80% of cluster security (pod security standards, network policies, node IAM roles, Managed Identities) in your hands.",
+      },
+      {
+        question: "How do you protect pod credentials in Azure AKS?",
+        answer: "We deploy Azure AD Workload Identity for AKS and Azure Key Vault Provider for Secrets Store CSI Driver, eliminating hardcoded cluster secrets.",
       },
       {
         question: "Will network policies impact cluster performance?",
-        answer: "No. We leverage eBPF-based Cilium policies which operate at the Linux kernel layer, delivering near-zero latency overhead even at 50,000+ RPS.",
-      },
-      {
-        question: "How do you protect the AWS/GCP instance metadata service (IMDS)?",
-        answer: "We enforce IMDSv2 with hop limits set to 1 and deploy iptables/eBPF filters blocking non-system pods from querying link-local credentials.",
+        answer: "No. We leverage eBPF-based Cilium / Azure CNI policies which operate at the Linux kernel layer, delivering near-zero latency overhead even at 50,000+ RPS.",
       },
       {
         question: "Can admission controller rules break deployment pipelines?",
@@ -578,18 +632,18 @@ export const SERVICES_LIST: ServiceDetail[] = [
     relatedServices: [
       {
         id: "aws-architecture",
-        title: "Cloud Security (AWS & GCP)",
+        title: "Multi-Cloud Architecture (AWS, Azure & GCP)",
         tagline: "Well-architected reviews, IAM least-privilege, and network microsegmentation.",
         practice: "Cloud Security",
       },
       {
-        id: "devsecops-pipeline",
-        title: "DevSecOps & Application Security",
-        tagline: "Automated pipeline security gates and container vulnerability scanning.",
-        practice: "DevSecOps",
+        id: "azure-security",
+        title: "Azure Security & Entra ID Governance",
+        tagline: "CAF Landing Zones, Entra PIM, and Microsoft Defender for Cloud.",
+        practice: "Cloud Security",
       },
     ],
-    tags: ["EKS", "GKE", "Kyverno", "Cilium", "Container Escape Defense"],
+    tags: ["EKS", "GKE", "Azure AKS", "Kyverno", "Cilium / Azure CNI", "Container Escape Defense"],
   },
   {
     id: "vciso-advisory",
@@ -735,9 +789,9 @@ export const CONSULTANTS: ConsultantProfile[] = [
     location: "New York, NY",
     avatarSeed: "ER",
     imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-    bio: "Seasoned infrastructure engineer and Kubernetes contributor. Advises enterprise CISOs on multi-account AWS/GCP boundary engineering and zero-trust CI/CD deployment security.",
-    certifications: ["CCSP", "CKS (Certified Kubernetes Security)", "GCP Professional Cloud Architect"],
-    specialties: ["Kubernetes Hardening", "GCP VPC-SC", "OIDC CI/CD Pipelines", "IaC Verification"],
+    bio: "Seasoned infrastructure engineer and Kubernetes contributor. Advises enterprise CISOs on multi-account AWS/GCP/Azure boundary engineering, Azure CAF landing zones, and zero-trust CI/CD deployment security.",
+    certifications: ["CCSP", "CKS (Certified Kubernetes Security)", "Azure Solutions Architect Expert", "GCP Professional Cloud Architect"],
+    specialties: ["Kubernetes Hardening (AKS/EKS/GKE)", "Azure CAF Landing Zones", "Entra ID PIM", "IaC Verification"],
     priorExperience: "Built security engineering programs for high-frequency trading platforms and fintech unicorns; 14 years hands-on engineering.",
   },
   {
@@ -825,6 +879,89 @@ export const DIFFERENTIATORS = [
   },
 ];
 
+export const CASE_STUDIES: CaseStudy[] = [
+  {
+    id: "fintech-rag-redteam",
+    clientTier: "Series C FinTech Unicorn",
+    industry: "Wealth Management & Algorithmic Trading",
+    engagementScope: "AI Security & RAG Perimeter Hardening",
+    headline: "Neutralizing Indirect Prompt Injection in Autonomous Portfolio Advisory LLM",
+    problem: "A high-growth algorithmic trading platform introduced an autonomous agent pipeline querying market filings and user balance sheets. During internal validation, researchers noticed user prompts could hijack LLM context to leak adjacent customer portfolio balances.",
+    solution: "Vectorbound conducted a 3-week adversarial red teaming engagement. We engineered cryptographic per-tenant context boundaries, implemented strict JSON Schema validators on SQL function calling parameters, and deployed an eBPF-level runtime egress monitor.",
+    outcomes: [
+      { metric: "100%", label: "Cross-Tenant Leakage Elimination", detail: "Zero prompt leakage reproducible across 4,500+ fuzzing variations" },
+      { metric: "3.2x", label: "Tool Validation Speedup", detail: "Sub-5ms deterministic schema verification layer with no model latency degradation" },
+      { metric: "$14M+", label: "Institutional Capital Unlocked", detail: "Passed Tier-1 banking vendor security review on first audit submission" },
+    ],
+    techStack: ["AWS Bedrock", "pgvector", "Claude 3.5 Sonnet", "OPA Gatekeeper", "Cilium eBPF"],
+    quote: {
+      text: "Vectorbound's red team didn't just point out vulnerabilities—they delivered production-ready pull requests with automated guardrails that our platform team deployed within 48 hours.",
+      author: "David K.",
+      title: "VP of Engineering & Head of AI Infrastructure",
+    },
+  },
+  {
+    id: "global-saas-kubernetes-multicloud",
+    clientTier: "Enterprise B2B SaaS (1,200+ Employees)",
+    industry: "Supply Chain Intelligence & Logistics",
+    engagementScope: "Multi-Cloud Ops & FinOps Unit Economics",
+    headline: "Slashing 38% Cloud Spend While Transitioning 60+ Microservices to Zero-Downtime Canary Deployments",
+    problem: "Facing escalating multi-cloud bills ($280k/mo) across AWS and GCP, the engineering organization suffered from 45-minute deployment cycles and frequent configuration drift between staging and production clusters.",
+    solution: "Vectorbound re-architected their multi-cloud topology using unified Terraform modules, introduced Karpenter spot autoscaling with intelligent rightsizing, and converted CI/CD pipelines to progressive Argo Rollouts with automated metric analysis.",
+    outcomes: [
+      { metric: "38.4%", label: "Cloud Run-Rate Reduction", detail: "Reclaimed $107,000/month across compute, NAT gateway egress, and unused volumes" },
+      { metric: "99.995%", label: "Deployment Reliability", detail: "Canary rollouts reduced deployment rollbacks by 92% with 0 customer-facing downtime" },
+      { metric: "8.5 min", label: "Lead Time to Production", detail: "Down from 46 minutes through parallelized container build cache orchestration" },
+    ],
+    techStack: ["EKS & GKE", "Terraform Cloud", "ArgoCD / Rollouts", "Karpenter", "Infracost"],
+    quote: {
+      text: "We realized measurable ROI in week three. The unit economics insights allowed us to report a 40% margin improvement to our board at the quarterly meeting.",
+      author: "Rachel S.",
+      title: "Chief Technology Officer",
+    },
+  },
+  {
+    id: "healthcare-soc2-readiness",
+    clientTier: "Digital Health Scale-Up",
+    industry: "HIPAA & Clinical Analytics",
+    engagementScope: "vCISO Advisory & SOC 2 Type II Acceleration",
+    headline: "Achieving Clean SOC 2 Type II & ISO 27001 Certification in 7 Weeks via Policy-as-Code",
+    problem: "To close $8M in hospital system enterprise contracts, the client required SOC 2 Type II and HIPAA compliance within 60 days, but had no dedicated security team and an unstructured AWS infrastructure.",
+    solution: "Our vCISO team established a Git-tracked policy library, integrated automated evidence collection into AWS Security Hub and GitHub Actions, and personally defended the controls during live auditor walkthroughs.",
+    outcomes: [
+      { metric: "7 Weeks", label: "Readiness to Audit Pass", detail: "Achieved full certification with zero auditor exceptions or deficiencies" },
+      { metric: "94%", label: "Automated Evidence Collection", detail: "Replaced manual screenshot gathering with real-time API assertion hooks" },
+      { metric: "3 Enterprise RFPs", label: "Immediate Sales Acceleration", detail: "Closed $4.2M in annual recurring revenue blocked on security questionnaires" },
+    ],
+    techStack: ["AWS Organizations", "GitHub Actions OIDC", "Drata / Vanta API", "HashiCorp Vault"],
+    quote: {
+      text: "Having a Vectorbound principal step in as our vCISO in front of our auditors and enterprise customers was the single highest-leverage decision we made this year.",
+      author: "Michael T.",
+      title: "Co-Founder & CEO",
+    },
+  },
+  {
+    id: "azure-entra-aks-modernization",
+    clientTier: "Global Enterprise Financial Services",
+    industry: "Insurance & FinTech Enterprise Platforms",
+    engagementScope: "Azure CAF Landing Zone & Entra ID PIM Transformation",
+    headline: "Hardening Azure Multi-Subscription Architecture with Entra PIM & Private AKS Clusters",
+    problem: "Over-privileged Subscription Owner assignments, unmanaged App Registration client secrets, and public AKS API server endpoints exposed sensitive payment records during a regulatory compliance audit.",
+    solution: "Vectorbound deployed an Azure Cloud Adoption Framework (CAF) Management Group hierarchy, enforced Entra ID Privileged Identity Management (PIM) for time-bound role activations, replaced static secrets with Azure Managed Identities, and migrated AKS clusters to private endpoints with Azure CNI powered by Cilium.",
+    outcomes: [
+      { metric: "100%", label: "Static Secret Elimination", detail: "Replaced all App Registration client secrets with federated Managed Identities" },
+      { metric: "88%", label: "Subscription Owner Reduction", detail: "Enforced Entra PIM just-in-time elevation requiring dual-approval approval workflows" },
+      { metric: "0 Exceptions", label: "Regulatory Compliance Audit", detail: "Achieved 100% pass mark on Microsoft Defender for Cloud HIPAA and SOC 2 benchmarks" },
+    ],
+    techStack: ["Azure CAF", "Azure AKS", "Entra ID PIM", "Microsoft Defender for Cloud", "Terraform / Bicep"],
+    quote: {
+      text: "Vectorbound transformed our Azure environment from an unsegmented risk liability into a hardened, zero-trust cloud foundation ready for enterprise scale.",
+      author: "Julian M.",
+      title: "Chief Information Security Officer",
+    },
+  },
+];
+
 export const INSIGHTS: InsightPost[] = [
   {
     id: "agentic-tool-threat-model",
@@ -843,6 +980,25 @@ export const INSIGHTS: InsightPost[] = [
       "Why semantic intent cannot substitute for deterministic parameter schema enforcement",
       "Architecting ephemeral per-tenant service tokens for AI agents",
       "Designing human-in-the-loop gates for state-mutating database operations",
+    ],
+  },
+  {
+    id: "azure-entra-pim-aks-hardening",
+    title: "Zero-Trust Azure Architecture: Hardening Entra ID PIM & Workload Managed Identities",
+    slug: "zero-trust-azure-entra-pim-aks",
+    category: "Azure Security Engineering",
+    publishDate: "August 2026",
+    readTime: "10 min read",
+    imageUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+    summary: "Unscoped App Registrations and static tenant client secrets represent top breach vectors in Microsoft Azure. A blueprint for time-bound PIM elevation and AKS Workload Identities.",
+    author: {
+      name: "Elena Rostova",
+      role: "Cloud Infrastructure Principal",
+    },
+    keyTakeaways: [
+      "Eliminating static Client Secrets in App Registrations via User-Assigned Managed Identities",
+      "Architecting Entra ID Privileged Identity Management (PIM) with conditional access step-up MFA",
+      "Configuring Azure CNI Powered by Cilium for granular eBPF pod microsegmentation in private AKS",
     ],
   },
   {

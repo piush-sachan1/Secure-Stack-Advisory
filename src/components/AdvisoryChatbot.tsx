@@ -21,7 +21,7 @@ interface AdvisoryChatbotProps {
   onOpenConsultation?: (topic?: string) => void;
 }
 
-const DEFAULT_WELCOME = "Welcome to SecureStack Advisory. I am your Lead Cloud & Security Advisory Engineer. Ask me anything regarding Multi-Cloud Architecture (AWS, GCP, Azure), 24/7 Managed SRE Operations, Agile DevOps/GitOps deployment pipelines, FinOps cost reduction, or AI Threat Modeling. All queries are backed by real-time Google Search grounding.";
+const DEFAULT_WELCOME = "Welcome to Vectorbound. I am your Lead Cloud & Security Advisory Engineer. Ask me anything regarding Multi-Cloud Architecture (AWS, GCP, Azure), 24/7 Managed SRE Operations, Agile DevOps/GitOps deployment pipelines, FinOps cost reduction, or AI Threat Modeling. All queries are backed by real-time Google Search grounding.";
 
 const DEFAULT_PROMPTS = [
   "How can we reduce AWS NAT Gateway transfer costs?",

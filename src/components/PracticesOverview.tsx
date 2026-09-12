@@ -1,12 +1,14 @@
 import React from 'react';
 import { PRACTICES } from '../data/contentData';
 import { Cpu, ShieldCheck, Cloud, Award, ArrowUpRight, CheckCircle2, Terminal, TrendingDown, Layers } from 'lucide-react';
+import { PracticesOverviewSkeleton } from './ThemedSkeleton';
 
 interface PracticesOverviewProps {
   onSelectPractice: (practiceId: string) => void;
+  isLoading?: boolean;
 }
 
-export const PracticesOverview: React.FC<PracticesOverviewProps> = ({ onSelectPractice }) => {
+export const PracticesOverview: React.FC<PracticesOverviewProps> = ({ onSelectPractice, isLoading = false }) => {
   const getPracticeIcon = (iconName: string) => {
     switch (iconName) {
       case 'Cpu':
@@ -36,7 +38,7 @@ export const PracticesOverview: React.FC<PracticesOverviewProps> = ({ onSelectPr
               Core Technical Disciplines
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
-              Seven Specialized Advisory Practices
+              {PRACTICES.length} Specialized Advisory Practices
             </h2>
           </div>
           <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed">
@@ -45,56 +47,60 @@ export const PracticesOverview: React.FC<PracticesOverviewProps> = ({ onSelectPr
         </div>
 
         {/* Practice Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {PRACTICES.map((practice) => (
-            <div
-              key={practice.id}
-              className="p-5 sm:p-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-cyan-950/20"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center justify-center group-hover:border-cyan-500/40 transition-colors">
-                    {getPracticeIcon(practice.icon)}
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/50">
-                    {practice.serviceCount} Services
-                  </span>
-                </div>
-
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
-                  {practice.title}
-                </h3>
-
-                <p className="text-xs font-medium text-slate-300 mb-3 leading-relaxed">
-                  {practice.tagline}
-                </p>
-
-                <p className="text-xs text-slate-400 mb-6 leading-relaxed line-clamp-3">
-                  {practice.description}
-                </p>
-
-                {/* Highlighted capabilities */}
-                <div className="space-y-2 mb-6 pt-4 border-t border-slate-800/80">
-                  {practice.highlightCapabilities.map((cap, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                      <span className="truncate">{cap}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => onSelectPractice(practice.id)}
-                className="w-full py-2.5 px-3 rounded-lg text-xs font-mono font-semibold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 flex items-center justify-between transition-all cursor-pointer"
+        {isLoading ? (
+          <PracticesOverviewSkeleton count={PRACTICES.length} />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {PRACTICES.map((practice) => (
+              <div
+                key={practice.id}
+                className="p-5 sm:p-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-cyan-950/20"
               >
-                <span>View Practice Capabilities</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
-            </div>
-          ))}
-        </div>
+                <div>
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800/80 flex items-center justify-center group-hover:border-cyan-500/40 transition-colors">
+                      {getPracticeIcon(practice.icon)}
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/50">
+                      {practice.serviceCount} Services
+                    </span>
+                  </div>
+
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                    {practice.title}
+                  </h3>
+
+                  <p className="text-xs font-medium text-slate-300 mb-3 leading-relaxed">
+                    {practice.tagline}
+                  </p>
+
+                  <p className="text-xs text-slate-400 mb-6 leading-relaxed line-clamp-3">
+                    {practice.description}
+                  </p>
+
+                  {/* Highlighted capabilities */}
+                  <div className="space-y-2 mb-6 pt-4 border-t border-slate-800/80">
+                    {practice.highlightCapabilities.map((cap, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-300">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span className="truncate">{cap}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onSelectPractice(practice.id)}
+                  className="w-full py-2.5 px-3 rounded-lg text-xs font-mono font-semibold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 flex items-center justify-between transition-all cursor-pointer"
+                >
+                  <span>View Practice Capabilities</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

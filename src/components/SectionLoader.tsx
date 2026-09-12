@@ -12,7 +12,7 @@ export const SectionLoader: React.FC<{ label?: string }> = ({ label = 'Loading A
           {label}
         </div>
         <div className="text-[11px] font-mono text-slate-500">
-          Decrypting SecureStack Telemetry & Controls
+          Decrypting Vectorbound Telemetry & Controls
         </div>
       </div>
     </div>

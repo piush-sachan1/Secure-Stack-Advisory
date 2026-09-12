@@ -36,8 +36,48 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     message: '',
   });
 
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailTouched, setEmailTouched] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateEmail = (email: string): string | null => {
+    const trimmed = email.trim();
+    if (!trimmed) {
+      return 'Work email is required.';
+    }
+    // Strict RFC 5322 compliant regex check
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+    if (!emailRegex.test(trimmed)) {
+      return 'Please enter a valid business email address (e.g. name@company.com).';
+    }
+    // Flag disposable / invalid domain endings
+    const parts = trimmed.split('@');
+    if (parts.length === 2) {
+      const domain = parts[1].toLowerCase();
+      if (!domain.includes('.') || domain.endsWith('.') || domain.startsWith('.')) {
+        return 'Email domain appears incomplete.';
+      }
+      const genericFree = ['mailinator.com', 'tempmail.com', '10minutemail.com', 'throwawaymail.com'];
+      if (genericFree.includes(domain)) {
+        return 'Please provide a corporate or organizational email address for scoping.';
+      }
+    }
+    return null;
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setFormData((prev) => ({ ...prev, workEmail: val }));
+    if (emailTouched) {
+      setEmailError(validateEmail(val));
+    }
+  };
+
+  const handleEmailBlur = () => {
+    setEmailTouched(true);
+    setEmailError(validateEmail(formData.workEmail));
+  };
 
   useEffect(() => {
     if (prefilledData) {
@@ -51,6 +91,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setEmailTouched(true);
+    const err = validateEmail(formData.workEmail);
+    if (err) {
+      setEmailError(err);
+      return;
+    }
+    setEmailError(null);
     setIsSubmitting(true);
 
     setTimeout(() => {
@@ -176,17 +223,37 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-mono uppercase text-slate-400 mb-1.5 font-medium">
-                        Work Email *
-                      </label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block text-xs font-mono uppercase text-slate-400 font-medium">
+                          Work Email *
+                        </label>
+                        {emailTouched && !emailError && formData.workEmail.length > 0 && (
+                          <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" /> Valid Business Email
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="email"
                         required
                         value={formData.workEmail}
-                        onChange={(e) => setFormData({ ...formData, workEmail: e.target.value })}
+                        onChange={handleEmailChange}
+                        onBlur={handleEmailBlur}
                         placeholder="alex@company.com"
-                        className="w-full px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-white text-sm focus:border-blue-500 focus:outline-none transition-colors"
+                        className={`w-full px-3.5 py-2.5 rounded-lg bg-slate-950 text-white text-sm focus:outline-none transition-colors border ${
+                          emailError && emailTouched
+                            ? 'border-red-500/80 focus:border-red-400 bg-red-950/10'
+                            : emailTouched && !emailError && formData.workEmail.length > 0
+                            ? 'border-emerald-500/60 focus:border-emerald-400'
+                            : 'border-slate-700 focus:border-blue-500'
+                        }`}
                       />
+                      {emailError && emailTouched && (
+                        <div className="flex items-center gap-1.5 mt-1.5 text-xs text-red-400 font-mono animate-in fade-in duration-150">
+                          <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                          <span>{emailError}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 

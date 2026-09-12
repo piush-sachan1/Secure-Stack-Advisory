@@ -22,6 +22,7 @@ import {
 import { AppSection } from '../types';
 import { useApp } from '../context/AppContext';
 import { RiskGauge } from './RiskGauge';
+import { PRACTICES, SERVICES_LIST } from '../data/contentData';
 
 interface ExecutiveGatewayProps {
   onNavigate: (section: AppSection) => void;
@@ -63,11 +64,11 @@ export const ExecutiveGateway: React.FC<ExecutiveGatewayProps> = ({ onNavigate, 
     {
       id: 'services' as AppSection,
       category: 'Advisory Practices',
-      title: '8 Specialized Practice Areas',
+      title: `${PRACTICES.length} Specialized Practice Areas`,
       tagline: 'Fixed-scope consulting spanning AI red teaming, cloud architecture, FinOps, and DevSecOps pipelines.',
       badge: 'Zero Vendor Kickbacks',
       badgeColor: 'amber',
-      stats: '8 Scoped Offerings',
+      stats: `${SERVICES_LIST.length} Consulting Services`,
       icon: Layers,
       gradient: 'from-amber-500/20 via-slate-900 to-slate-950',
       borderHover: 'hover:border-amber-500/60',
@@ -334,7 +335,7 @@ export const ExecutiveGateway: React.FC<ExecutiveGatewayProps> = ({ onNavigate, 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-4">
               <p className="text-xs sm:text-sm text-slate-300 italic leading-relaxed">
-                "SecureStack discovered critical IAM privilege escalation paths across our multi-account AWS Landing Zone 
+                "Vectorbound discovered critical IAM privilege escalation paths across our multi-account AWS Landing Zone 
                 that three other automated scanners completely missed. Outstanding architectural rigor."
               </p>
               <div className="pt-3 border-t border-slate-800/80 flex items-center gap-3">
@@ -366,7 +367,7 @@ export const ExecutiveGateway: React.FC<ExecutiveGatewayProps> = ({ onNavigate, 
 
             <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-4">
               <p className="text-xs sm:text-sm text-slate-300 italic leading-relaxed">
-                "SecureStack guided us through our first SOC 2 Type II audit in 7 weeks flat. Every control was backed 
+                "Vectorbound guided us through our first SOC 2 Type II audit in 7 weeks flat. Every control was backed 
                 by automated Terraform and GitOps policies. Flawless execution."
               </p>
               <div className="pt-3 border-t border-slate-800/80 flex items-center gap-3">

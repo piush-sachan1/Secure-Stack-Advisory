@@ -27,7 +27,7 @@ export const WhyUs: React.FC = () => {
             Principled Differentiation
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mb-2 sm:mb-3">
-            Why Technical Teams Trust SecureStack
+            Why Technical Teams Trust Vectorbound
           </h2>
           <p className="text-slate-400 text-xs sm:text-base leading-relaxed">
             We built this advisory because traditional cybersecurity consultancies deliver generic compliance reports while missing the critical exploit paths in modern cloud and AI stacks.

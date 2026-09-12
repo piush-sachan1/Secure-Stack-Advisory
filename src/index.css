@@ -8,6 +8,7 @@
     overflow-x: hidden;
     width: 100%;
     -webkit-text-size-adjust: 100%;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   body {
@@ -15,6 +16,7 @@
     width: 100%;
     position: relative;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   /* Offset fixed sticky header for smooth anchor jumps */
@@ -513,6 +515,150 @@
   color: #c084fc !important;
 }
 
+/* Crimson Sentinel & Zero-Trust Theme */
+[data-theme="crimson-sentinel"] {
+  --bg-primary: #0c0609;
+  --bg-secondary: #160a0f;
+  --bg-tertiary: #241018;
+  --text-primary: #fff1f2;
+  --text-secondary: #fda4af;
+  --accent-color: #f43f5e;
+  --accent-glow: rgba(244, 63, 94, 0.22);
+  --border-color: rgba(244, 63, 94, 0.35);
+}
+
+[data-theme="crimson-sentinel"] html,
+[data-theme="crimson-sentinel"] body,
+[data-theme="crimson-sentinel"] .theme-bg-root,
+[data-theme="crimson-sentinel"] .bg-\[\#07090e\],
+[data-theme="crimson-sentinel"] .bg-\[\#05070a\],
+[data-theme="crimson-sentinel"] .bg-\[\#0b0e17\] {
+  background-color: #0c0609 !important;
+}
+
+[data-theme="crimson-sentinel"] .bg-\[\#0b0f19\],
+[data-theme="crimson-sentinel"] .bg-\[\#0c101a\],
+[data-theme="crimson-sentinel"] .bg-\[\#070a10\],
+[data-theme="crimson-sentinel"] .bg-\[\#080c14\],
+[data-theme="crimson-sentinel"] .bg-slate-950,
+[data-theme="crimson-sentinel"] .bg-slate-950\/80,
+[data-theme="crimson-sentinel"] .bg-slate-950\/90,
+[data-theme="crimson-sentinel"] .bg-slate-900\/90 {
+  background-color: #160a0f !important;
+  border-color: rgba(244, 63, 94, 0.22) !important;
+}
+
+[data-theme="crimson-sentinel"] .bg-slate-900,
+[data-theme="crimson-sentinel"] .bg-slate-900\/60,
+[data-theme="crimson-sentinel"] .bg-slate-900\/80 {
+  background-color: #241018 !important;
+}
+
+[data-theme="crimson-sentinel"] .bg-cyber-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(244, 63, 94, 0.2) 0%, rgba(136, 19, 55, 0.08) 45%, transparent 70%) !important;
+}
+
+[data-theme="crimson-sentinel"] .bg-cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(244, 63, 94, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 63, 94, 0.07) 1px, transparent 1px) !important;
+}
+
+[data-theme="crimson-sentinel"] ::selection {
+  background-color: #f43f5e !important;
+  color: #ffffff !important;
+}
+
+[data-theme="crimson-sentinel"] .text-slate-100,
+[data-theme="crimson-sentinel"] .text-white {
+  color: #fff1f2 !important;
+}
+
+[data-theme="crimson-sentinel"] .text-slate-200,
+[data-theme="crimson-sentinel"] .text-slate-300 {
+  color: #ffe4e6 !important;
+}
+
+[data-theme="crimson-sentinel"] .text-slate-400 {
+  color: #fecdd3 !important;
+}
+
+[data-theme="crimson-sentinel"] .text-slate-500 {
+  color: #fda4af !important;
+}
+
+/* Swiss Monochrome & Platinum Theme */
+[data-theme="swiss-minimal"] {
+  --bg-primary: #0a0a0c;
+  --bg-secondary: #121216;
+  --bg-tertiary: #1a1a20;
+  --text-primary: #ffffff;
+  --text-secondary: #cbd5e1;
+  --accent-color: #f1f5f9;
+  --accent-glow: rgba(241, 245, 249, 0.15);
+  --border-color: rgba(148, 163, 184, 0.35);
+}
+
+[data-theme="swiss-minimal"] html,
+[data-theme="swiss-minimal"] body,
+[data-theme="swiss-minimal"] .theme-bg-root,
+[data-theme="swiss-minimal"] .bg-\[\#07090e\],
+[data-theme="swiss-minimal"] .bg-\[\#05070a\],
+[data-theme="swiss-minimal"] .bg-\[\#0b0e17\] {
+  background-color: #0a0a0c !important;
+}
+
+[data-theme="swiss-minimal"] .bg-\[\#0b0f19\],
+[data-theme="swiss-minimal"] .bg-\[\#0c101a\],
+[data-theme="swiss-minimal"] .bg-\[\#070a10\],
+[data-theme="swiss-minimal"] .bg-\[\#080c14\],
+[data-theme="swiss-minimal"] .bg-slate-950,
+[data-theme="swiss-minimal"] .bg-slate-950\/80,
+[data-theme="swiss-minimal"] .bg-slate-950\/90,
+[data-theme="swiss-minimal"] .bg-slate-900\/90 {
+  background-color: #121216 !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+}
+
+[data-theme="swiss-minimal"] .bg-slate-900,
+[data-theme="swiss-minimal"] .bg-slate-900\/60,
+[data-theme="swiss-minimal"] .bg-slate-900\/80 {
+  background-color: #1a1a20 !important;
+}
+
+[data-theme="swiss-minimal"] .bg-cyber-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.12) 0%, rgba(71, 85, 105, 0.06) 45%, transparent 70%) !important;
+}
+
+[data-theme="swiss-minimal"] .bg-cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+}
+
+[data-theme="swiss-minimal"] ::selection {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+[data-theme="swiss-minimal"] .text-slate-100,
+[data-theme="swiss-minimal"] .text-white {
+  color: #ffffff !important;
+}
+
+[data-theme="swiss-minimal"] .text-slate-200,
+[data-theme="swiss-minimal"] .text-slate-300 {
+  color: #e2e8f0 !important;
+}
+
+[data-theme="swiss-minimal"] .text-slate-400 {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="swiss-minimal"] .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
 /* Titanium Light Theme */
 [data-theme="light-titanium"] {
   --bg-primary: #f8fafc;
@@ -652,6 +798,44 @@
 [data-theme="light-titanium"] .theme-switcher-modal .bg-slate-900\/80 {
   background-color: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
+}
+
+/* Ensure no headings, subheadings, labels or badges get washed out in Titanium Light */
+[data-theme="light-titanium"] h1,
+[data-theme="light-titanium"] h2,
+[data-theme="light-titanium"] h3,
+[data-theme="light-titanium"] h4,
+[data-theme="light-titanium"] h5,
+[data-theme="light-titanium"] h6 {
+  color: #0f172a !important;
+}
+
+[data-theme="light-titanium"] p,
+[data-theme="light-titanium"] span {
+  color: inherit;
+}
+
+[data-theme="light-titanium"] .text-slate-50,
+[data-theme="light-titanium"] .text-slate-100 {
+  color: #090e17 !important;
+}
+
+[data-theme="light-titanium"] .text-slate-600 {
+  color: #475569 !important;
+}
+
+[data-theme="light-titanium"] .bg-slate-900\/40,
+[data-theme="light-titanium"] .bg-slate-900\/60,
+[data-theme="light-titanium"] .bg-slate-900\/80,
+[data-theme="light-titanium"] .bg-slate-900 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light-titanium"] .border-slate-800,
+[data-theme="light-titanium"] .border-slate-850,
+[data-theme="light-titanium"] .border-slate-750 {
+  border-color: #e2e8f0 !important;
 }
 
 

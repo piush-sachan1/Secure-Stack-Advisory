@@ -117,7 +117,7 @@ export const ChannelManagerModal: React.FC = () => {
                       ...formData,
                       x: {
                         id: 'x',
-                        url: formData.x?.url || 'https://x.com/SecureStackSec',
+                        url: formData.x?.url || 'https://x.com/VectorboundSec',
                         description: formData.x?.description || 'Threat alerts & advisories',
                         badge: formData.x?.badge || '34K Followers',
                         ...formData.x,
@@ -126,7 +126,7 @@ export const ChannelManagerModal: React.FC = () => {
                     })
                   }
                   required
-                  placeholder="@SecureStackSec"
+                  placeholder="@VectorboundSec"
                   className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-400 font-mono"
                 />
               </div>
@@ -142,7 +142,7 @@ export const ChannelManagerModal: React.FC = () => {
                       ...formData,
                       x: {
                         id: 'x',
-                        name: formData.x?.name || '@SecureStackSec',
+                        name: formData.x?.name || '@VectorboundSec',
                         description: formData.x?.description || 'Threat alerts & advisories',
                         badge: formData.x?.badge || '34K Followers',
                         ...formData.x,
@@ -169,8 +169,8 @@ export const ChannelManagerModal: React.FC = () => {
                     ...formData,
                     x: {
                       id: 'x',
-                      name: formData.x?.name || '@SecureStackSec',
-                      url: formData.x?.url || 'https://x.com/SecureStackSec',
+                      name: formData.x?.name || '@VectorboundSec',
+                      url: formData.x?.url || 'https://x.com/VectorboundSec',
                       badge: formData.x?.badge || '34K Followers',
                       ...formData.x,
                       description: e.target.value,
@@ -219,7 +219,7 @@ export const ChannelManagerModal: React.FC = () => {
                     })
                   }
                   required
-                  placeholder="@securestack.cyber"
+                  placeholder="@vectorbound.cyber"
                   className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-pink-500 font-mono"
                 />
               </div>
@@ -298,7 +298,7 @@ export const ChannelManagerModal: React.FC = () => {
                     })
                   }
                   required
-                  placeholder="SecureStack Advisory Group"
+                  placeholder="Vectorbound Advisory Group"
                   className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
                 />
               </div>
@@ -377,7 +377,7 @@ export const ChannelManagerModal: React.FC = () => {
                     })
                   }
                   required
-                  placeholder="@SecureStackArchitecture"
+                  placeholder="@VectorboundArchitecture"
                   className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-xs text-white focus:outline-none focus:border-red-500 font-mono"
                 />
               </div>
@@ -431,7 +431,7 @@ export const ChannelManagerModal: React.FC = () => {
                 <XIcon className="w-4 h-4 text-white shrink-0" />
                 <div className="truncate">
                   <span className="font-mono text-[11px] text-white block truncate">
-                    {formData.x?.name || '@SecureStackSec'}
+                    {formData.x?.name || '@VectorboundSec'}
                   </span>
                   <span className="text-[10px] text-slate-400 truncate block">
                     {formData.x?.description || 'Threat alerts'}

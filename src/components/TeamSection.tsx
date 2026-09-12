@@ -16,7 +16,7 @@ export const TeamSection: React.FC = () => {
             You Work Directly With Principals
           </h2>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            Unlike traditional consulting firms that staff engagements with junior analysts supervised by remote partners, every SecureStack assessment is planned, executed, and defended by senior engineers with 14+ years of hands-on offensive experience.
+            Unlike traditional consulting firms that staff engagements with junior analysts supervised by remote partners, every Vectorbound assessment is planned, executed, and defended by senior engineers with 14+ years of hands-on offensive experience.
           </p>
         </div>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ServiceDetail } from '../types';
-import { X, CheckCircle2, HelpCircle, ArrowRight, ShieldCheck, FileCode, Layers } from 'lucide-react';
+import { X, CheckCircle2, ArrowRight, ShieldCheck, FileCode, Layers } from 'lucide-react';
+import { ServiceFAQ } from './ServiceFAQ';
 
 interface ServiceDetailModalProps {
   service: ServiceDetail | null;
@@ -121,29 +122,13 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             </div>
           </div>
 
-          {/* 4. Technical FAQ */}
+          {/* 4. Technical FAQ Component */}
           {service.faq && service.faq.length > 0 && (
-            <div className="space-y-3">
-              <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-2">
-                <HelpCircle className="w-4 h-4" />
-                4. Technical FAQ & Rules of Engagement
-              </h4>
-              <div className="space-y-3">
-                {service.faq.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1.5"
-                  >
-                    <h5 className="text-xs font-semibold text-white">
-                      Q: {item.question}
-                    </h5>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      {item.answer}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ServiceFAQ
+              faqList={service.faq}
+              serviceTitle={service.title}
+              onBookConsultation={onBookConsultation}
+            />
           )}
 
           {/* 5. Related Services */}

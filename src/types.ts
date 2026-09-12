@@ -93,6 +93,28 @@ export interface ProcessStage {
   deliverable: string;
 }
 
+export interface CaseStudy {
+  id: string;
+  clientTier: string;
+  industry: string;
+  engagementScope: string;
+  headline: string;
+  problem: string;
+  solution: string;
+  outcomes: {
+    metric: string;
+    label: string;
+    detail: string;
+  }[];
+  techStack: string[];
+  deliverableLink?: string;
+  quote?: {
+    text: string;
+    author: string;
+    title: string;
+  };
+}
+
 export interface InsightPost {
   id: string;
   title: string;
@@ -188,11 +210,13 @@ export type SiteTheme =
   | 'slate-corporate'
   | 'nordic-frost'
   | 'amethyst-stealth'
+  | 'crimson-sentinel'
+  | 'swiss-minimal'
   | 'light-titanium';
 
 export interface SocialChannelItem {
   id: 'instagram' | 'facebook' | 'youtube' | 'x';
-  name: string; // The editable channel name / handle (e.g. @securestack.security)
+  name: string; // The editable channel name / handle (e.g. @vectorbound.cyber)
   url: string;
   description: string;
   badge?: string;

@@ -141,15 +141,27 @@ function generateFallbackAssessment(input: RiskAssessmentInput): AssessmentResul
     });
   }
 
+  if (input.cloudProviders.includes('azure')) {
+    findings.push({
+      id: "f-azure-1",
+      title: "Over-Privileged Azure Entra ID Roles & Unscoped Managed Identities",
+      severity: "High" as const,
+      category: "Azure Identity & Security",
+      impact: "Unrestricted App Registrations and missing Entra PIM time-bound activations expose Azure subscriptions to full tenant privilege escalation.",
+      technicalExplanation: "Azure compute instances (AKS, Azure Container Apps, VM Scale Sets) often utilize broad Subscription Contributor roles or long-lived Client Secrets rather than System/User-Assigned Managed Identities with Entra PIM controls.",
+      recommendedMitigation: "Enforce Azure Entra ID Privileged Identity Management (PIM), eliminate static client secrets in favor of Managed Identities, and apply Azure Policy initiatives for CIS Azure Benchmarks.",
+    });
+  }
+
   if (findings.length < 3) {
     findings.push({
       id: "f-cloud-4",
-      title: "Over-Privileged Cloud IAM Roles Supporting AI Inference Workloads",
+      title: "Over-Privileged Multi-Cloud IAM Roles Supporting AI Workloads",
       severity: "Medium" as const,
       category: "Cloud Infrastructure",
-      impact: "Compromised compute containers or microservices can assume broad administrative IAM permissions.",
+      impact: "Compromised compute containers or microservices can assume broad administrative IAM / Entra permissions.",
       technicalExplanation: "AI serving pods frequently inherit cluster-wide administrator access or default service accounts rather than fine-grained workload identities.",
-      recommendedMitigation: "Migrate to GCP Workload Identity / AWS IRSA with minimal KMS, Secrets Manager, and storage permissions strictly scoped to read-only model buckets.",
+      recommendedMitigation: "Migrate to Azure AD Workload Identity for AKS / GCP Workload Identity / AWS IRSA with minimal Key Vault, KMS, Secrets Manager, and storage permissions strictly scoped to read-only model buckets.",
     });
   }
 
@@ -194,7 +206,7 @@ const handleAssessment = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const systemPrompt = `You are a Principal Security Architect and Offensive AI Threat Modeler at SecureStack Advisory, a premier technical cybersecurity consultancy.
+  const systemPrompt = `You are a Principal Security Architect and Offensive AI Threat Modeler at Vectorbound, a premier technical cybersecurity consultancy.
 You are evaluating a technical organization's AI architecture inputs to deliver an objective, rigorous, and actionable security snapshot for their engineering leadership (CTO, CISO, VP Engineering).
 
 Adhere strictly to these principles:
@@ -205,7 +217,7 @@ Adhere strictly to these principles:
    - 60-79: High risk (e.g. RAG or agentic tools, customer PII exposure, limited detection telemetry)
    - 80-100: Critical risk (e.g. public autonomous agents with programmatic DB/API access, raw customer PII, zero governance, or unmonitored prompt endpoints)
 3. Produce exactly 3 prioritized, specific findings with realistic technical depth (mention vector stores, indirect prompt injection, IAM workload identity, SSRF, tool execution sandboxing, data egress).
-4. Recommend one of SecureStack's four practice areas:
+4. Recommend one of Vectorbound's four practice areas:
    - "AI Security & Governance"
    - "DevSecOps & Application Security"
    - "Cloud Security"
@@ -392,9 +404,9 @@ Production LLM and agentic systems require specialized defensive controls:
    - Implement pre-filtering in Qdrant/Pinecone/pgvector so queries only retrieve chunks matching the authenticated user's organization and tenant permissions.`;
   }
 
-  return `### SecureStack Principal Advisory Guidance
+  return `### Vectorbound Principal Advisory Guidance
 
-Thank you for your inquiry. SecureStack Advisory specializes in high-velocity multi-cloud, agile delivery, and defensive security engineering:
+Thank you for your inquiry. Vectorbound specializes in high-velocity multi-cloud, agile delivery, and defensive security engineering:
 
 - **Multi-Cloud Architecture (AWS, GCP, Azure)**: Standardized Landing Zones, zero-trust network perimeters, and 24/7 follow-the-sun managed SRE operations with a 15-minute P1 SLA.
 - **Agile DevOps & Delivery Pipelines**: Trunk-based GitOps with ArgoCD/Flux, automated canary rollouts, and shift-left static/dynamic security gates.
@@ -422,12 +434,12 @@ app.post("/api/chat", async (req: Request, res: Response) => {
       reply: expertReply,
       groundingChunks: [],
       webSearchQueries: [],
-      modelUsed: "SecureStack Advisory Engine (Offline Mode)",
+      modelUsed: "Vectorbound Engine (Offline Mode)",
     });
     return;
   }
 
-  const systemInstruction = `You are the Lead Cloud Architect, FinOps Strategist & Principal Security Advisor at SecureStack Advisory.
+  const systemInstruction = `You are the Lead Cloud Architect, FinOps Strategist & Principal Security Advisor at Vectorbound.
 You advise CTOs, CISOs, and VP of Engineering on:
 1. Multi-Cloud Infrastructure (AWS, GCP, Azure) — architecture design, landing zones, VPC topologies, sovereign cloud perimeters, and 24/7 managed SRE operations.
 2. Agile DevOps Support — trunk-based GitOps, CI/CD automated gates, zero-downtime blue/green & canary deployments, ephemeral preview environments, and DORA performance metrics.
@@ -511,7 +523,7 @@ Tone & Style:
       reply: expertFallback,
       groundingChunks: [],
       webSearchQueries: [],
-      modelUsed: "SecureStack Advisory Engine",
+      modelUsed: "Vectorbound Engine",
     });
   } catch (err: any) {
     console.error("Chat API unexpected error:", err);
@@ -520,7 +532,7 @@ Tone & Style:
       reply: expertFallback,
       groundingChunks: [],
       webSearchQueries: [],
-      modelUsed: "SecureStack Advisory Engine",
+      modelUsed: "Vectorbound Engine",
     });
   }
 });
@@ -543,7 +555,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[SecureStack Advisory] Server running on http://0.0.0.0:${PORT}`);
+    console.log(`[Vectorbound] Server running on http://0.0.0.0:${PORT}`);
   });
 }
 

@@ -7,7 +7,7 @@ import { ExecutiveGateway } from './components/ExecutiveGateway';
 import { SectionHeader } from './components/SectionHeader';
 import { Footer } from './components/Footer';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { SERVICES_LIST } from './data/contentData';
+import { SERVICES_LIST, PRACTICES } from './data/contentData';
 import { ServiceDetail, AppSection } from './types';
 
 // Direct static component imports for zero-latency switching and rock-solid stability
@@ -24,10 +24,16 @@ import { ChannelManagerModal } from './components/ChannelManagerModal';
 import { TeamSection } from './components/TeamSection';
 import { ProcessTimeline } from './components/ProcessTimeline';
 import { WhyUs } from './components/WhyUs';
+import { CaseStudiesSection } from './components/CaseStudiesSection';
 import { InsightsSection } from './components/InsightsSection';
 import { ContactSection } from './components/ContactSection';
 import { AdvisoryChatbot } from './components/AdvisoryChatbot';
-import { ThemeSwitcher } from './components/ThemeSwitcher';
+import {
+  ServicesGridSkeleton,
+  PracticesOverviewSkeleton,
+  ComplianceTrackerSkeleton,
+  CaseStudiesSkeleton,
+} from './components/ThemedSkeleton';
 
 const sectionTransitionVariants = {
   initial: {
@@ -83,7 +89,7 @@ function AppContent() {
         setCurrentSection('risk-tool');
       } else if (rawHash === 'compliance-tracker') {
         setCurrentSection('compliance');
-      } else if (rawHash === 'team' || rawHash === 'process' || rawHash === 'why-us' || rawHash === 'insights') {
+      } else if (rawHash === 'team' || rawHash === 'process' || rawHash === 'why-us' || rawHash === 'case-studies' || rawHash === 'insights') {
         setCurrentSection('company');
         setTimeout(() => {
           document.getElementById(rawHash)?.scrollIntoView({ behavior: 'smooth' });
@@ -312,8 +318,8 @@ function AppContent() {
                 <SectionHeader
                   currentSection="services"
                   category="ADVISORY PRACTICES & SCOPED ENGAGEMENTS"
-                  title="Specialized Practice Areas & Deliverable Matrices"
-                  subtitle="Explore our eight fixed-scope engineering practices. Every engagement delivers verifiable architecture diagrams, infrastructure-as-code implementations, and auditor-ready governance documentation."
+                  title={`${PRACTICES.length} Specialized Practice Areas & Service Catalog`}
+                  subtitle={`Explore our ${PRACTICES.length} fixed-scope engineering practices and ${SERVICES_LIST.length} specialized consulting services. Every engagement delivers verifiable architecture diagrams, infrastructure-as-code implementations, and auditor-ready governance documentation.`}
                   badge="100% Fixed-Scope Guarantee"
                   badgeColor="amber"
                   onNavigate={navigateToSection}
@@ -392,6 +398,14 @@ function AppContent() {
                     <WhyUs />
                   </div>
 
+                  <div id="case-studies">
+                    <CaseStudiesSection
+                      onScheduleConsultation={(topic) => {
+                        navigateToSection('contact', 'contact');
+                      }}
+                    />
+                  </div>
+
                   <div id="insights">
                     <InsightsSection />
                   </div>
@@ -446,9 +460,6 @@ function AppContent() {
 
         {/* Social Channel Manager Modal (Allows updating Instagram, Facebook, and YouTube channel names) */}
         <ChannelManagerModal />
-
-        {/* Temporary Website Theme Switcher (Sandbox for Design Review) */}
-        <ThemeSwitcher />
 
         {/* Interactive Multi-Turn AI Cloud & Cyber Advisor with Search Grounding */}
         <AdvisoryChatbot onOpenConsultation={handleOpenConsultationTopic} />

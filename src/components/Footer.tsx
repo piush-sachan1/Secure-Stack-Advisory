@@ -213,7 +213,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectServiceTitle, onNavigate
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
             {/* X.com Card */}
             <a
-              href={channels.x?.url || 'https://x.com/SecureStackSec'}
+              href={channels.x?.url || 'https://x.com/VectorboundSec'}
               target="_blank"
               rel="noopener noreferrer"
               className="group p-2.5 sm:p-3 rounded-lg bg-slate-900/50 hover:bg-slate-900/90 border border-slate-800/80 hover:border-slate-600 transition-all flex flex-col justify-between space-y-1.5"
@@ -228,7 +228,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectServiceTitle, onNavigate
                       X.com
                     </span>
                     <span className="text-xs font-bold text-white font-mono group-hover:text-cyan-300 transition-colors truncate block">
-                      {channels.x?.name || '@SecureStackSec'}
+                      {channels.x?.name || '@VectorboundSec'}
                     </span>
                   </div>
                 </div>

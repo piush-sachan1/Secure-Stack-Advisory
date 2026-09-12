@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldCheck, Menu, X, ArrowUpRight, Globe, Check, ChevronDown, Palette } from 'lucide-react';
+import { ShieldCheck, Menu, X, ArrowUpRight, Globe, Check, ChevronDown } from 'lucide-react';
 import { COMPANY_INFO } from '../data/contentData';
 import { useApp } from '../context/AppContext';
 import { SupportedLanguage, AppSection } from '../types';
@@ -11,7 +11,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBookClick }) => {
-  const { language, setLanguage, t, setIsThemeSandboxOpen, theme } = useApp();
+  const { language, setLanguage, t } = useApp();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
@@ -129,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
           type="button"
           onClick={() => handleSectionClick('overview')}
           className="flex items-center gap-2.5 group focus:outline-none shrink-0 text-left cursor-pointer"
-          aria-label="SecureStack Advisory Home"
+          aria-label="Vectorbound Home"
         >
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-cyan-400 via-teal-500 to-cyan-600 flex items-center justify-center text-slate-950 shadow-md shadow-cyan-500/25 border border-cyan-300/50 group-hover:scale-105 transition-all">
             <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-slate-950 stroke-[2.5]" />
@@ -250,20 +250,6 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
               </div>
             )}
           </div>
-
-          {/* Temporary Theme Switcher Trigger */}
-          <button
-            type="button"
-            onClick={() => setIsThemeSandboxOpen(true)}
-            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-mono text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-cyan-500/50 transition-all cursor-pointer shadow-sm"
-            title="Temporary Theme Switcher for Design Review"
-          >
-            <Palette className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline text-[11px] font-semibold">Theme</span>
-            <span className="px-1 py-0.2 rounded text-[8px] bg-amber-950/80 text-amber-300 border border-amber-700/60 hidden md:inline">
-              Temp
-            </span>
-          </button>
 
           {/* Book Review CTA */}
           <button
@@ -413,26 +399,6 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
                   <ArrowUpRight className="w-3.5 h-3.5 text-purple-400" />
                 </button>
               </div>
-            </div>
-
-            {/* Mobile Theme Switcher Trigger */}
-            <div className="pt-2 border-t border-slate-800/60">
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setIsThemeSandboxOpen(true);
-                }}
-                className="w-full py-2.5 px-3 rounded-lg text-xs font-mono text-cyan-300 bg-slate-900/90 border border-slate-700/80 flex items-center justify-between cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <Palette className="w-4 h-4 text-cyan-400" />
-                  <span>Website Aesthetic & Theme Sandbox</span>
-                </div>
-                <span className="px-1.5 py-0.2 rounded text-[9px] bg-amber-950/80 text-amber-300 border border-amber-700/60">
-                  Temp
-                </span>
-              </button>
             </div>
 
             {/* Mobile Footer CTAs */}
