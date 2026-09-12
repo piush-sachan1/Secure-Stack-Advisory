@@ -7,12 +7,14 @@ import {
   Globe,
   Check,
   ChevronDown,
+  ChevronRight,
   Cpu,
   Terminal,
   Code2,
   Cloud,
   Layers,
   Server,
+  FileCheck,
   FileCheck2,
   Award,
   Shield,
@@ -22,6 +24,7 @@ import {
   GitBranch,
   BookOpen,
   Sparkles,
+  Lock,
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/contentData';
 import { useApp } from '../context/AppContext';
@@ -788,58 +791,57 @@ export const Header: React.FC<HeaderProps> = ({
             className="bg-[#07090e]/98 border-b border-cyan-500/20 max-h-[85vh] overflow-y-auto p-4 sm:p-6 space-y-5 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Mobile Market & Language Switcher Card */}
-            <div className="p-3.5 rounded-xl bg-slate-900/90 border border-cyan-500/30 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-semibold flex items-center gap-1.5">
-                  <Globe className="w-3.5 h-3.5" />
-                  {t.header.switchPrompt}
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
-                  {t.marketBadge}
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {languagesList.map((lang) => {
-                  const isSelected = language === lang.code;
-                  return (
-                    <button
-                      key={lang.code}
-                      type="button"
-                      onClick={() => handleSelectLanguage(lang.code)}
-                      className={`py-2 px-2 rounded-lg text-xs font-mono flex flex-col items-center justify-center gap-1 border transition-all cursor-pointer ${
-                        isSelected
-                          ? 'bg-cyan-950 border-cyan-400 text-cyan-200 font-bold shadow-sm'
-                          : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <span className="text-base">{lang.flag}</span>
-                      <span className="text-[11px]">{lang.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Subsections & Practices for Mobile */}
-            <div className="space-y-3">
-              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold px-1">
-                Explore Subsections & Standards
+            {/* Primary Navigation Menu Items (Matching Desktop Top Bar) */}
+            <div className="space-y-4">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-semibold px-1 flex items-center justify-between border-b border-slate-800/80 pb-2">
+                <span>Navigation Menu</span>
+                <span className="text-slate-500 font-normal">7 Modules</span>
               </div>
 
-              {/* Services Subsections */}
-              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-                <div className="text-xs font-bold text-cyan-300 font-mono">Services & Practices</div>
-                <div className="grid grid-cols-1 gap-1.5 text-xs text-slate-300">
+              {/* 1. Overview */}
+              <button
+                type="button"
+                onClick={() => handleSectionClick('overview')}
+                className={`w-full p-3 rounded-xl text-xs font-semibold font-mono flex items-center justify-between transition-all cursor-pointer ${
+                  currentSection === 'overview'
+                    ? 'bg-cyan-950/90 text-cyan-300 border border-cyan-500/50 shadow-md shadow-cyan-950'
+                    : 'bg-slate-900/60 text-slate-200 hover:bg-slate-800 border border-slate-800/80'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                  <span>Overview</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-500" />
+              </button>
+
+              {/* 2. Services & Practices */}
+              <div className="rounded-xl bg-slate-900/40 border border-slate-800/90 p-3 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => handleSectionClick('services')}
+                  className={`w-full p-2.5 rounded-lg text-xs font-semibold font-mono flex items-center justify-between transition-all cursor-pointer ${
+                    currentSection === 'services'
+                      ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/40'
+                      : 'bg-slate-900/90 text-slate-100 hover:bg-slate-800 border border-slate-700/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-cyan-400" />
+                    <span>Services & Practices</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                </button>
+                <div className="grid grid-cols-1 gap-1 pl-2 text-xs">
                   <button
                     type="button"
                     onClick={() => {
                       onSelectPractice?.('ai-security');
                       handleSectionClick('services');
                     }}
-                    className="p-2 rounded-lg hover:bg-slate-800 text-left flex items-center justify-between text-slate-200"
+                    className="p-2 rounded-lg hover:bg-slate-800/80 text-left flex items-center justify-between text-slate-300 hover:text-white"
                   >
-                    <span>AI Security & LLM Governance</span>
+                    <span>• AI Security & LLM Governance</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-purple-400" />
                   </button>
                   <button
@@ -848,9 +850,9 @@ export const Header: React.FC<HeaderProps> = ({
                       onSelectPractice?.('devsecops');
                       handleSectionClick('services');
                     }}
-                    className="p-2 rounded-lg hover:bg-slate-800 text-left flex items-center justify-between text-slate-200"
+                    className="p-2 rounded-lg hover:bg-slate-800/80 text-left flex items-center justify-between text-slate-300 hover:text-white"
                   >
-                    <span>DevSecOps & Supply Chain Gates</span>
+                    <span>• DevSecOps & Supply Chain Gates</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
                   </button>
                   <button
@@ -859,25 +861,39 @@ export const Header: React.FC<HeaderProps> = ({
                       onSelectPractice?.('cloud-security');
                       handleSectionClick('services');
                     }}
-                    className="p-2 rounded-lg hover:bg-slate-800 text-left flex items-center justify-between text-slate-200"
+                    className="p-2 rounded-lg hover:bg-slate-800/80 text-left flex items-center justify-between text-slate-300 hover:text-white"
                   >
-                    <span>Multi-Cloud Architecture (AWS, Azure & GCP)</span>
+                    <span>• Multi-Cloud Architecture (AWS/Azure/GCP)</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-sky-400" />
                   </button>
                 </div>
               </div>
 
-              {/* Compliance Standards Subsections */}
-              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-                <div className="text-xs font-bold text-emerald-300 font-mono">Compliance Frameworks</div>
-                <div className="grid grid-cols-2 gap-1.5 text-xs">
+              {/* 3. Compliance & Risk */}
+              <div className="rounded-xl bg-slate-900/40 border border-slate-800/90 p-3 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => handleSectionClick('compliance')}
+                  className={`w-full p-2.5 rounded-lg text-xs font-semibold font-mono flex items-center justify-between transition-all cursor-pointer ${
+                    currentSection === 'compliance'
+                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40'
+                      : 'bg-slate-900/90 text-slate-100 hover:bg-slate-800 border border-slate-700/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <FileCheck className="w-4 h-4 text-emerald-400" />
+                    <span>Compliance & Risk Matrix</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                </button>
+                <div className="grid grid-cols-2 gap-1.5 pl-1 text-xs">
                   <button
                     type="button"
                     onClick={() => {
                       onSelectComplianceTab?.('soc2');
-                      setMobileMenuOpen(false);
+                      handleSectionClick('compliance');
                     }}
-                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                    className="p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300 text-left hover:text-white hover:border-slate-700"
                   >
                     SOC 2 Type I & II
                   </button>
@@ -885,9 +901,9 @@ export const Header: React.FC<HeaderProps> = ({
                     type="button"
                     onClick={() => {
                       onSelectComplianceTab?.('pci');
-                      setMobileMenuOpen(false);
+                      handleSectionClick('compliance');
                     }}
-                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                    className="p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300 text-left hover:text-white hover:border-slate-700"
                   >
                     PCI DSS v4.0
                   </button>
@@ -895,19 +911,19 @@ export const Header: React.FC<HeaderProps> = ({
                     type="button"
                     onClick={() => {
                       onSelectComplianceTab?.('cis');
-                      setMobileMenuOpen(false);
+                      handleSectionClick('compliance');
                     }}
-                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                    className="p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300 text-left hover:text-white hover:border-slate-700"
                   >
-                    CIS Controls
+                    CIS Controls v8
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       onSelectComplianceTab?.('hipaa');
-                      setMobileMenuOpen(false);
+                      handleSectionClick('compliance');
                     }}
-                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                    className="p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300 text-left hover:text-white hover:border-slate-700"
                   >
                     HIPAA Security
                   </button>
@@ -915,14 +931,114 @@ export const Header: React.FC<HeaderProps> = ({
                     type="button"
                     onClick={() => {
                       onSelectComplianceTab?.('iso27001');
-                      setMobileMenuOpen(false);
+                      handleSectionClick('compliance');
                     }}
-                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                    className="p-2 rounded-lg bg-slate-950/80 border border-slate-800 text-slate-300 text-left col-span-2 hover:text-white hover:border-slate-700"
                   >
-                    ISO 27001 & NIS-2
+                    ISO 27001 & NIS-2 Directives
                   </button>
                 </div>
               </div>
+
+              {/* 4. Operations & SRE */}
+              <button
+                type="button"
+                onClick={() => handleSectionClick('cloud-ops')}
+                className={`w-full p-3 rounded-xl text-xs font-semibold font-mono flex items-center justify-between transition-all cursor-pointer ${
+                  currentSection === 'cloud-ops'
+                    ? 'bg-sky-950/90 text-sky-300 border border-sky-500/50 shadow-md shadow-sky-950'
+                    : 'bg-slate-900/60 text-slate-200 hover:bg-slate-800 border border-slate-800/80'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Terminal className="w-4 h-4 text-sky-400" />
+                  <span>Cloud & SRE Operations</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-500" />
+              </button>
+
+              {/* 5. Leadership & Company */}
+              <div className="rounded-xl bg-slate-900/40 border border-slate-800/90 p-3 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => handleSectionClick('company')}
+                  className={`w-full p-2.5 rounded-lg text-xs font-semibold font-mono flex items-center justify-between transition-all cursor-pointer ${
+                    currentSection === 'company'
+                      ? 'bg-indigo-950 text-indigo-300 border border-indigo-500/40'
+                      : 'bg-slate-900/90 text-slate-100 hover:bg-slate-800 border border-slate-700/60'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-indigo-400" />
+                    <span>Leadership & Company</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400" />
+                </button>
+                <div className="grid grid-cols-1 gap-1 pl-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'principals')}
+                    className="p-2 rounded-lg hover:bg-slate-800/80 text-left text-slate-300 hover:text-white"
+                  >
+                    • Principals & Lead Security Architects
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'process')}
+                    className="p-2 rounded-lg hover:bg-slate-800/80 text-left text-slate-300 hover:text-white"
+                  >
+                    • 6-Stage Engagement Lifecycle
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'why-us')}
+                    className="p-2 rounded-lg hover:bg-slate-800/80 text-left text-slate-300 hover:text-white"
+                  >
+                    • Why Vectorbound (Differentiation)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'insights')}
+                    className="p-2 rounded-lg hover:bg-slate-800/80 text-left text-slate-300 hover:text-white"
+                  >
+                    • Insights & Technical Field Reports
+                  </button>
+                </div>
+              </div>
+
+              {/* 6. AI Risk Assessment */}
+              <button
+                type="button"
+                onClick={() => handleSectionClick('risk-tool')}
+                className={`w-full p-3 rounded-xl text-xs font-semibold font-mono flex items-center justify-between transition-all cursor-pointer ${
+                  currentSection === 'risk-tool'
+                    ? 'bg-purple-950/90 text-purple-300 border border-purple-500/50 shadow-md shadow-purple-950'
+                    : 'bg-slate-900/60 text-slate-200 hover:bg-slate-800 border border-slate-800/80'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Sparkles className="w-4 h-4 text-purple-400" />
+                  <span>AI Risk Assessment Tool</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-500" />
+              </button>
+
+              {/* 7. Contact */}
+              <button
+                type="button"
+                onClick={() => handleSectionClick('contact')}
+                className={`w-full p-3 rounded-xl text-xs font-semibold font-mono flex items-center justify-between transition-all cursor-pointer ${
+                  currentSection === 'contact'
+                    ? 'bg-teal-950/90 text-teal-300 border border-teal-500/50 shadow-md shadow-teal-950'
+                    : 'bg-slate-900/60 text-slate-200 hover:bg-slate-800 border border-slate-800/80'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <Lock className="w-4 h-4 text-teal-400" />
+                  <span>Contact</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-500" />
+              </button>
             </div>
 
             {/* Mobile Footer CTAs */}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { COMPANY_INFO } from '../data/contentData';
 import {
   ShieldCheck,
@@ -11,6 +11,7 @@ import {
   Settings,
   Globe,
   Check,
+  ChevronUp,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { SupportedLanguage } from '../types';
@@ -28,12 +29,26 @@ const XIcon: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) 
 
 export const Footer: React.FC<FooterProps> = ({ onSelectServiceTitle, onNavigateSection }) => {
   const { channels, setIsChannelModalOpen, t, language, setLanguage } = useApp();
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
 
   const languagesList: { code: SupportedLanguage; label: string; flag: string; target: string }[] = [
     { code: 'en', label: 'English', flag: '🇬🇧', target: 'Global / US' },
     { code: 'de', label: 'Deutsch', flag: '🇩🇪', target: 'DACH / EU' },
     { code: 'fr', label: 'Français', flag: '🇫🇷', target: 'France / NIS-2' },
   ];
+
+  const currentLangObj = languagesList.find((l) => l.code === language) || languagesList[0];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <footer className="bg-[#05070a] text-slate-400 text-xs border-t border-slate-800/80">
@@ -343,56 +358,73 @@ export const Footer: React.FC<FooterProps> = ({ onSelectServiceTitle, onNavigate
           </div>
         </div>
 
-        {/* Bottom Bar with Language Switcher */}
-        <div className="pt-6 border-t border-slate-900/90 space-y-4">
-          {/* Language Switcher Bar at the downside */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-3 rounded-xl bg-slate-950/90 border border-slate-800/90">
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
-              <Globe className="w-4 h-4 text-cyan-400 shrink-0" />
-              <span className="font-semibold text-white">Language / Market:</span>
-              <span className="text-slate-400 text-[11px] hidden sm:inline">
-                • Active Region: {languagesList.find((l) => l.code === language)?.target}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1.5 flex-wrap justify-center">
-              {languagesList.map((lang) => {
-                const isSelected = language === lang.code;
-                return (
-                  <button
-                    key={lang.code}
-                    type="button"
-                    onClick={() => setLanguage(lang.code)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
-                      isSelected
-                        ? 'bg-cyan-950 text-cyan-300 font-bold border border-cyan-500/50 shadow-sm shadow-cyan-950'
-                        : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
-                    }`}
-                  >
-                    <span>{lang.flag}</span>
-                    <span>{lang.label}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
-                  </button>
-                );
-              })}
-            </div>
+        {/* Bottom Bar with Compact Language Icon Button & Copyright */}
+        <div className="pt-6 border-t border-slate-900/90 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 text-center sm:text-left">
+          <div className="flex items-center gap-2 justify-center sm:justify-start">
+            <Lock className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+            <span>
+              &copy; {new Date().getFullYear()} {COMPANY_INFO.name}. {t.footer.rightsReserved}
+            </span>
           </div>
 
-          {/* Copyright Line */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 text-center sm:text-left pt-1">
-            <div className="flex items-center gap-2 justify-center sm:justify-start">
-              <Lock className="w-3.5 h-3.5 text-slate-600 shrink-0" />
-              <span>
-                &copy; {new Date().getFullYear()} {COMPANY_INFO.name}. {t.footer.rightsReserved}
-              </span>
-            </div>
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-2">
+            <span className="hover:text-slate-400 cursor-pointer">{t.footer.responsibleDisclosure}</span>
+            <span>•</span>
+            <span className="hover:text-slate-400 cursor-pointer">{t.footer.securityPrivacy}</span>
+            <span>•</span>
+            <span className="hover:text-slate-400 cursor-pointer">{t.footer.termsEngagement}</span>
 
-            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1">
-              <span className="hover:text-slate-400 cursor-pointer">{t.footer.responsibleDisclosure}</span>
-              <span>•</span>
-              <span className="hover:text-slate-400 cursor-pointer">{t.footer.securityPrivacy}</span>
-              <span>•</span>
-              <span className="hover:text-slate-400 cursor-pointer">{t.footer.termsEngagement}</span>
+            {/* Small Language Switcher Icon Button */}
+            <div className="relative inline-block ml-1" ref={langRef}>
+              <button
+                type="button"
+                onClick={() => setIsLangOpen(!isLangOpen)}
+                className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 text-slate-300 hover:text-white text-xs font-mono transition-all cursor-pointer shadow-sm"
+                title="Select Language / Region"
+                aria-label="Select Language"
+              >
+                <Globe className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <span className="text-xs">{currentLangObj.flag}</span>
+                <span className="font-bold text-[10px] text-white uppercase">{currentLangObj.code}</span>
+                <ChevronUp className={`w-3 h-3 text-slate-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Popover Menu */}
+              {isLangOpen && (
+                <div className="absolute bottom-full mb-2 right-0 w-48 rounded-xl bg-[#0b0f19] border border-cyan-500/40 shadow-2xl p-1.5 z-50 animate-in fade-in zoom-in-95 text-left">
+                  <div className="px-2 py-1 border-b border-slate-800/80 mb-1">
+                    <span className="text-[10px] font-mono uppercase text-cyan-400 font-semibold block">
+                      Language / Market
+                    </span>
+                  </div>
+                  <div className="space-y-0.5">
+                    {languagesList.map((lang) => {
+                      const isSelected = language === lang.code;
+                      return (
+                        <button
+                          key={lang.code}
+                          type="button"
+                          onClick={() => {
+                            setLanguage(lang.code);
+                            setIsLangOpen(false);
+                          }}
+                          className={`w-full text-left px-2 py-1.5 rounded-lg text-xs font-mono flex items-center justify-between gap-2 transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-cyan-950/80 text-cyan-300 font-bold border border-cyan-500/30'
+                              : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span>{lang.flag}</span>
+                            <span>{lang.label}</span>
+                          </div>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
