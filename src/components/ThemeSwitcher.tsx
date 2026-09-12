@@ -8,6 +8,7 @@ interface ThemePreset {
   name: string;
   tagline: string;
   badge: string;
+  category: 'Cyber & SOC' | 'Enterprise & Cloud' | 'Executive & Compliance';
   accentColor: string;
   bgPreview: string;
   borderPreview: string;
@@ -18,44 +19,79 @@ export const THEME_PRESETS: ThemePreset[] = [
   {
     id: 'cyber-obsidian',
     name: 'Cyber Obsidian',
-    tagline: 'Default dark high-tech security canvas with neon cyan/teal telemetry glow',
-    badge: 'Current / Default',
+    tagline: 'Precision dark high-tech security canvas with neon cyan and teal telemetry glow',
+    badge: 'Default Cyber',
+    category: 'Cyber & SOC',
     accentColor: '#06b6d4',
     bgPreview: 'bg-[#07090e]',
     borderPreview: 'border-cyan-500/40',
   },
   {
     id: 'deep-navy',
-    name: 'Deep Navy & Sapphire',
-    tagline: 'Enterprise hyperscaler midnight navy with cobalt and azure infrastructure accents',
-    badge: 'Enterprise Blue',
+    name: 'Deep Navy & Cobalt',
+    tagline: 'Enterprise hyperscaler midnight navy with cobalt and azure cloud infrastructure accents',
+    badge: 'Hyperscaler Blue',
+    category: 'Enterprise & Cloud',
     accentColor: '#38bdf8',
     bgPreview: 'bg-[#040914]',
     borderPreview: 'border-sky-500/40',
   },
   {
+    id: 'slate-corporate',
+    name: 'Graphite & Pure Indigo',
+    tagline: 'Refined Silicon Valley corporate enterprise aesthetic with deep carbon slate and crisp indigo',
+    badge: 'Enterprise SaaS',
+    category: 'Enterprise & Cloud',
+    accentColor: '#6366f1',
+    bgPreview: 'bg-[#090b11]',
+    borderPreview: 'border-indigo-500/40',
+  },
+  {
     id: 'emerald-matrix',
     name: 'Emerald SRE Matrix',
-    tagline: '24/7 SRE NOC & terminal operations theme with high-contrast mint accents',
-    badge: 'SRE Matrix',
+    tagline: '24/7 SRE NOC & terminal operations theme with high-contrast mint telemetry accents',
+    badge: 'SRE & DevOps',
+    category: 'Cyber & SOC',
     accentColor: '#10b981',
     bgPreview: 'bg-[#030d07]',
     borderPreview: 'border-emerald-500/40',
   },
   {
+    id: 'nordic-frost',
+    name: 'Nordic Frost Slate',
+    tagline: 'Minimalist Scandinavian engineering theme with icy teal, cool slate, and balanced contrast',
+    badge: 'Nordic Clean',
+    category: 'Enterprise & Cloud',
+    accentColor: '#14b8a6',
+    bgPreview: 'bg-[#080d12]',
+    borderPreview: 'border-teal-500/40',
+  },
+  {
     id: 'obsidian-gold',
-    name: 'Obsidian Amber',
-    tagline: 'Executive luxury cybersecurity theme with warm amber gold & deep carbon slate',
+    name: 'Obsidian Amber & Gold',
+    tagline: 'Executive luxury advisory theme with warm amber gold & deep carbon slate contrast',
     badge: 'Executive Gold',
+    category: 'Executive & Compliance',
     accentColor: '#f59e0b',
     bgPreview: 'bg-[#0a0907]',
     borderPreview: 'border-amber-500/40',
   },
   {
+    id: 'amethyst-stealth',
+    name: 'Amethyst Stealth & SecOps',
+    tagline: 'Modern cyber red-team & threat intelligence aesthetic with violet neon accents',
+    badge: 'Threat Intel',
+    category: 'Cyber & SOC',
+    accentColor: '#a855f7',
+    bgPreview: 'bg-[#08060f]',
+    borderPreview: 'border-purple-500/40',
+  },
+  {
     id: 'light-titanium',
     name: 'Titanium Light',
-    tagline: 'Crisp, high-contrast daylight theme for boardrooms and daylight compliance reviews',
+    tagline: 'Crisp, high-contrast daylight theme tailored for boardrooms and daylight compliance reviews',
     badge: 'Clean Light',
+    category: 'Executive & Compliance',
     accentColor: '#0284c7',
     bgPreview: 'bg-slate-100',
     borderPreview: 'border-slate-300',
@@ -65,9 +101,13 @@ export const THEME_PRESETS: ThemePreset[] = [
 
 export const ThemeSwitcher: React.FC = () => {
   const { theme, setTheme, isThemeSandboxOpen, setIsThemeSandboxOpen } = useApp();
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<'All' | 'Cyber & SOC' | 'Enterprise & Cloud' | 'Executive & Compliance'>('All');
 
   const activePreset = THEME_PRESETS.find((p) => p.id === theme) || THEME_PRESETS[0];
+
+  const filteredPresets = activeCategory === 'All'
+    ? THEME_PRESETS
+    : THEME_PRESETS.filter((p) => p.category === activeCategory);
 
   return (
     <>
@@ -100,7 +140,7 @@ export const ThemeSwitcher: React.FC = () => {
           onClick={() => setIsThemeSandboxOpen(false)}
         >
           <div
-            className="relative w-full max-w-xl bg-[#090d16] border border-cyan-500/40 rounded-2xl shadow-2xl overflow-hidden my-auto text-slate-100 flex flex-col max-h-[90vh]"
+            className="theme-switcher-modal relative w-full max-w-xl bg-[#090d16] border border-cyan-500/40 rounded-2xl shadow-2xl overflow-hidden my-auto text-slate-100 flex flex-col max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -133,9 +173,30 @@ export const ThemeSwitcher: React.FC = () => {
               </button>
             </div>
 
+            {/* Category Filter Pills */}
+            <div className="px-4 sm:px-5 pt-3 pb-2 bg-slate-950/60 border-b border-slate-850 flex items-center gap-1.5 overflow-x-auto text-xs font-mono">
+              {(['All', 'Enterprise & Cloud', 'Cyber & SOC', 'Executive & Compliance'] as const).map((cat) => {
+                const isActive = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-slate-800 text-white font-semibold border border-slate-600 shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Presets List */}
             <div className="p-4 sm:p-5 overflow-y-auto space-y-3">
-              {THEME_PRESETS.map((preset) => {
+              {filteredPresets.map((preset) => {
                 const isSelected = theme === preset.id;
                 return (
                   <button
@@ -144,9 +205,17 @@ export const ThemeSwitcher: React.FC = () => {
                     onClick={() => setTheme(preset.id)}
                     className={`w-full p-3.5 sm:p-4 rounded-xl text-left transition-all flex items-center justify-between gap-3 border cursor-pointer ${
                       isSelected
-                        ? 'bg-slate-900 border-cyan-400 shadow-md shadow-cyan-950/40 ring-1 ring-cyan-400/50'
+                        ? 'bg-slate-900 shadow-md shadow-black/40 ring-1'
                         : 'bg-slate-950/60 hover:bg-slate-900/80 border-slate-800 hover:border-slate-700'
                     }`}
+                    style={
+                      isSelected
+                        ? {
+                            borderColor: preset.accentColor,
+                            boxShadow: `0 4px 20px -2px ${preset.accentColor}33`,
+                          }
+                        : undefined
+                    }
                   >
                     <div className="flex items-center gap-3.5">
                       {/* Color Preview Swatch */}
@@ -164,7 +233,22 @@ export const ThemeSwitcher: React.FC = () => {
                           <span className="font-bold text-sm text-white">
                             {preset.name}
                           </span>
-                          <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
+                          <span
+                            className="px-1.5 py-0.2 rounded text-[9px] font-mono border"
+                            style={
+                              isSelected
+                                ? {
+                                    backgroundColor: `${preset.accentColor}22`,
+                                    color: preset.accentColor,
+                                    borderColor: `${preset.accentColor}55`,
+                                  }
+                                : {
+                                    backgroundColor: '#1e293b',
+                                    color: '#cbd5e1',
+                                    borderColor: '#334155',
+                                  }
+                            }
+                          >
                             {preset.badge}
                           </span>
                         </div>
@@ -176,7 +260,10 @@ export const ThemeSwitcher: React.FC = () => {
 
                     <div className="shrink-0">
                       {isSelected ? (
-                        <div className="w-6 h-6 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center shadow-sm">
+                        <div
+                          className="w-6 h-6 rounded-full text-slate-950 flex items-center justify-center shadow-sm"
+                          style={{ backgroundColor: preset.accentColor }}
+                        >
                           <Check className="w-3.5 h-3.5 stroke-[3]" />
                         </div>
                       ) : (

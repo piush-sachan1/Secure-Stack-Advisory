@@ -185,6 +185,9 @@ export type SiteTheme =
   | 'deep-navy'
   | 'emerald-matrix'
   | 'obsidian-gold'
+  | 'slate-corporate'
+  | 'nordic-frost'
+  | 'amethyst-stealth'
   | 'light-titanium';
 
 export interface SocialChannelItem {
