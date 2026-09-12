@@ -1,5 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldCheck, Menu, X, ArrowUpRight, Globe, Check, ChevronDown } from 'lucide-react';
+import {
+  ShieldCheck,
+  Menu,
+  X,
+  ArrowUpRight,
+  Globe,
+  Check,
+  ChevronDown,
+  Cpu,
+  Terminal,
+  Code2,
+  Cloud,
+  Layers,
+  Server,
+  FileCheck2,
+  Award,
+  Shield,
+  Activity,
+  DollarSign,
+  Users,
+  GitBranch,
+  BookOpen,
+  Sparkles,
+} from 'lucide-react';
 import { COMPANY_INFO } from '../data/contentData';
 import { useApp } from '../context/AppContext';
 import { SupportedLanguage, AppSection } from '../types';
@@ -8,14 +31,25 @@ interface HeaderProps {
   currentSection: AppSection;
   onNavigate: (section: AppSection, targetAnchor?: string) => void;
   onBookClick: () => void;
+  onSelectPractice?: (practiceId: string) => void;
+  onSelectComplianceTab?: (tab: 'all' | 'soc2' | 'pci' | 'cis' | 'iso27001') => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBookClick }) => {
+export const Header: React.FC<HeaderProps> = ({
+  currentSection,
+  onNavigate,
+  onBookClick,
+  onSelectPractice,
+  onSelectComplianceTab,
+}) => {
   const { language, setLanguage, t } = useApp();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [hoveredMenu, setHoveredMenu] = useState<'services' | 'compliance' | 'cloud-ops' | 'company' | null>(null);
+  
   const langDropdownRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,6 +81,7 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
       if (e.key === 'Escape') {
         setMobileMenuOpen(false);
         setLangDropdownOpen(false);
+        setHoveredMenu(null);
       }
     };
     window.addEventListener('resize', handleResize);
@@ -68,6 +103,19 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
       document.body.style.overflow = '';
     };
   }, [mobileMenuOpen]);
+
+  const handleMouseEnter = (menuKey: 'services' | 'compliance' | 'cloud-ops' | 'company') => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setHoveredMenu(menuKey);
+  };
+
+  const handleMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredMenu(null);
+    }, 180);
+  };
 
   const languagesList: { code: SupportedLanguage; label: string; flag: string; target: string; badge: string }[] = [
     {
@@ -93,18 +141,9 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
     },
   ];
 
-  const sectionTabs: { id: AppSection; label: string; badge?: string; highlight?: boolean }[] = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'cloud-ops', label: 'Cloud & SRE', badge: 'AWS · GCP' },
-    { id: 'risk-tool', label: 'AI Risk Tool', badge: 'Interactive', highlight: true },
-    { id: 'services', label: 'Services' },
-    { id: 'compliance', label: 'Compliance', badge: 'SOC 2' },
-    { id: 'company', label: 'Leadership' },
-    { id: 'contact', label: 'Contact' },
-  ];
-
   const handleSectionClick = (sectionId: AppSection, targetAnchor?: string) => {
     setMobileMenuOpen(false);
+    setHoveredMenu(null);
     onNavigate(sectionId, targetAnchor);
   };
 
@@ -144,38 +183,557 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
           </div>
         </button>
 
-        {/* Desktop Primary Section Navigation Tabs */}
-        <nav className="hidden lg:flex items-center gap-1.5 p-1 rounded-xl bg-slate-950/80 border border-slate-800/90" aria-label="Main Navigation">
-          {sectionTabs.map((tab) => {
-            const isActive = currentSection === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => handleSectionClick(tab.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 focus:outline-none ${
-                  isActive
-                    ? 'bg-cyan-950/90 text-cyan-300 font-semibold border border-cyan-700/80 shadow-sm shadow-cyan-950'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+        {/* Desktop Primary Section Navigation Tabs with Hover Subsections */}
+        <nav
+          className="hidden lg:flex items-center gap-1.5 p-1 rounded-xl bg-slate-950/80 border border-slate-800/90 relative"
+          aria-label="Main Navigation"
+        >
+          {/* Overview */}
+          <button
+            type="button"
+            onClick={() => handleSectionClick('overview')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 focus:outline-none ${
+              currentSection === 'overview'
+                ? 'bg-cyan-950/90 text-cyan-300 font-semibold border border-cyan-700/80 shadow-sm shadow-cyan-950'
+                : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+            }`}
+          >
+            Overview
+          </button>
+
+          {/* Services with Hover Dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => handleMouseEnter('services')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              type="button"
+              onClick={() => handleSectionClick('services')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1 focus:outline-none ${
+                currentSection === 'services' || hoveredMenu === 'services'
+                  ? 'bg-cyan-950/90 text-cyan-300 font-semibold border border-cyan-700/80 shadow-sm shadow-cyan-950'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+              }`}
+            >
+              <span>Services</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  hoveredMenu === 'services' ? 'rotate-180 text-cyan-400' : 'text-slate-400'
                 }`}
+              />
+            </button>
+
+            {/* Hover Mega-Dropdown: Services */}
+            {hoveredMenu === 'services' && (
+              <div
+                className="absolute left-0 mt-2 w-[680px] bg-[#090d16]/98 border border-cyan-500/30 rounded-2xl shadow-2xl p-5 backdrop-blur-xl ring-1 ring-cyan-500/20 z-50 animate-in fade-in zoom-in-95 duration-150"
+                onMouseEnter={() => handleMouseEnter('services')}
+                onMouseLeave={handleMouseLeave}
               >
-                <span>{tab.label}</span>
-                {tab.badge && (
-                  <span
-                    className={`px-1.5 py-0.2 rounded text-[9px] font-mono uppercase font-semibold ${
-                      tab.highlight
-                        ? 'bg-purple-950 text-purple-300 border border-purple-800'
-                        : isActive
-                        ? 'bg-cyan-900 text-cyan-200'
-                        : 'bg-slate-800 text-slate-400'
-                    }`}
-                  >
-                    {tab.badge}
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                  <span className="text-xs font-mono uppercase text-cyan-400 font-semibold flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-cyan-400" />
+                    Engineering Practices & Security Services
                   </span>
-                )}
-              </button>
-            );
-          })}
+                  <span className="text-[11px] font-mono text-slate-400">AWS · GCP · Azure</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('ai-security');
+                      handleSectionClick('services');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Cpu className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+                      <span>AI Security & Governance</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Generative AI threat auditing, prompt injection defense, & agentic red teaming.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('devsecops');
+                      handleSectionClick('services');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Terminal className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                      <span>DevSecOps & CI/CD Pipelines</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Automated pipeline gates, SAST/DAST PR scanning, and supply chain hardening.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('appsec');
+                      handleSectionClick('services');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Code2 className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" />
+                      <span>AppSec & Penetration Testing</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      BOLA / IDOR REST API testing, GraphQL security, and manual code reviews.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('cloud-security');
+                      handleSectionClick('services');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Cloud className="w-4 h-4 text-sky-400 group-hover:scale-110 transition-transform" />
+                      <span>AWS Cloud Architecture</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Control Tower, SCPs, GuardDuty, Transit Gateway, & IAM privilege pruning.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('cloud-security');
+                      handleSectionClick('services');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Layers className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                      <span>Azure Enterprise Security</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      CAF Landing Zones, Entra ID PIM JIT elevation, AKS & Defender for Cloud.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('cloud-security');
+                      handleSectionClick('services');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/50 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Server className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+                      <span>GCP Sovereign Security</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      VPC Service Controls, GCP Org policies, GKE Workload Identity, & SCC.
+                    </p>
+                  </button>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-400">Looking for custom engagement?</span>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('services')}
+                    className="text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>View All Services & FAQ</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Compliance & Risk with Hover Dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => handleMouseEnter('compliance')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              type="button"
+              onClick={() => handleSectionClick('compliance')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1 focus:outline-none ${
+                currentSection === 'compliance' || hoveredMenu === 'compliance'
+                  ? 'bg-cyan-950/90 text-cyan-300 font-semibold border border-cyan-700/80 shadow-sm shadow-cyan-950'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+              }`}
+            >
+              <span>Compliance & Risk</span>
+              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono uppercase font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                SOC 2
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  hoveredMenu === 'compliance' ? 'rotate-180 text-cyan-400' : 'text-slate-400'
+                }`}
+              />
+            </button>
+
+            {/* Hover Mega-Dropdown: Compliance */}
+            {hoveredMenu === 'compliance' && (
+              <div
+                className="absolute left-0 mt-2 w-[620px] bg-[#090d16]/98 border border-cyan-500/30 rounded-2xl shadow-2xl p-5 backdrop-blur-xl ring-1 ring-cyan-500/20 z-50 animate-in fade-in zoom-in-95 duration-150"
+                onMouseEnter={() => handleMouseEnter('compliance')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                  <span className="text-xs font-mono uppercase text-emerald-400 font-semibold flex items-center gap-2">
+                    <FileCheck2 className="w-4 h-4 text-emerald-400" />
+                    Regulatory Compliance & Standard Subsections
+                  </span>
+                  <span className="text-[11px] font-mono text-slate-400">Continuous Assurance</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('soc2');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-emerald-300 mb-1">
+                      <Award className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                      <span>SOC 2 Type I & Type II</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Point-in-time design & continuous operating effectiveness audits with automated evidence.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('pci');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <ShieldCheck className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                      <span>PCI DSS Gap Assessment</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      PCI DSS v4.0 Cardholder Data Environment (CDE) segmentation & tokenization verification.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('cis');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-teal-950/40 border border-slate-800 hover:border-teal-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-teal-300 mb-1">
+                      <Check className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" />
+                      <span>CIS Controls Implementation</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Level 1 & Level 2 CIS Foundations Benchmarks across AWS, Azure, and Google Cloud.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('iso27001');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Globe className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+                      <span>ISO/IEC 27001 & NIS-2</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      2022 ISMS Annex A controls, BSI C5 & sovereign European data protection compliance.
+                    </p>
+                  </button>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-400">Interactive tracker with real evidence logs</span>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('compliance')}
+                    className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>Open Compliance Tracker →</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Cloud & SRE with Hover Dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => handleMouseEnter('cloud-ops')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              type="button"
+              onClick={() => handleSectionClick('cloud-ops')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1 focus:outline-none ${
+                currentSection === 'cloud-ops' || hoveredMenu === 'cloud-ops'
+                  ? 'bg-cyan-950/90 text-cyan-300 font-semibold border border-cyan-700/80 shadow-sm shadow-cyan-950'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+              }`}
+            >
+              <span>Cloud & SRE</span>
+              <span className="px-1.5 py-0.2 rounded text-[9px] font-mono uppercase font-semibold bg-cyan-900 text-cyan-200">
+                AWS · Azure · GCP
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  hoveredMenu === 'cloud-ops' ? 'rotate-180 text-cyan-400' : 'text-slate-400'
+                }`}
+              />
+            </button>
+
+            {/* Hover Mega-Dropdown: Cloud & SRE */}
+            {hoveredMenu === 'cloud-ops' && (
+              <div
+                className="absolute left-0 mt-2 w-[600px] bg-[#090d16]/98 border border-cyan-500/30 rounded-2xl shadow-2xl p-5 backdrop-blur-xl ring-1 ring-cyan-500/20 z-50 animate-in fade-in zoom-in-95 duration-150"
+                onMouseEnter={() => handleMouseEnter('cloud-ops')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                  <span className="text-xs font-mono uppercase text-sky-400 font-semibold flex items-center gap-2">
+                    <Cloud className="w-4 h-4 text-sky-400" />
+                    Multi-Cloud Infrastructure & 24/7 Operations
+                  </span>
+                  <span className="text-[11px] font-mono text-emerald-400">15-min SLA</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('cloud-ops', 'multi-cloud-ops')}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Cloud className="w-4 h-4 text-sky-400 group-hover:scale-110 transition-transform" />
+                      <span>Multi-Cloud Landing Zones</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Production-grade AWS Control Tower, Azure CAF & GCP Org hierarchy IaC blueprints.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('cloud-ops', 'devops-support')}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Activity className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                      <span>24/7 Managed SRE NOC</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Guaranteed 15-minute P1 incident response, automated runbooks & Tier-3 engineering.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('cloud-ops', 'finops-optimization')}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <DollarSign className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                      <span>FinOps & Cost Reduction</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Reclaim 25% to 40% of wasted compute/storage spend with automated PR cost guardrails.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('cloud-security');
+                      handleSectionClick('services');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Layers className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+                      <span>Kubernetes & Container Hardening</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Cluster hardening for EKS, GKE, and private Azure AKS with Cilium eBPF network security.
+                    </p>
+                  </button>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-400">Follow-the-sun global NOC coverage</span>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('cloud-ops')}
+                    className="text-sky-400 hover:text-sky-300 font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>View Cloud & SRE Operations Hub →</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* AI Risk Tool (Direct Link) */}
+          <button
+            type="button"
+            onClick={() => handleSectionClick('risk-tool')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 focus:outline-none ${
+              currentSection === 'risk-tool'
+                ? 'bg-purple-950/90 text-purple-200 font-semibold border border-purple-700/80 shadow-sm shadow-purple-950'
+                : 'text-purple-300 hover:text-white hover:bg-purple-950/50 border border-purple-900/50'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+            <span>AI Risk Tool</span>
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono uppercase font-semibold bg-purple-900 text-purple-200">
+              Interactive
+            </span>
+          </button>
+
+          {/* Company / Leadership with Hover Dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => handleMouseEnter('company')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              type="button"
+              onClick={() => handleSectionClick('company')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1 focus:outline-none ${
+                currentSection === 'company' || hoveredMenu === 'company'
+                  ? 'bg-cyan-950/90 text-cyan-300 font-semibold border border-cyan-700/80 shadow-sm shadow-cyan-950'
+                  : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+              }`}
+            >
+              <span>Leadership</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                  hoveredMenu === 'company' ? 'rotate-180 text-cyan-400' : 'text-slate-400'
+                }`}
+              />
+            </button>
+
+            {/* Hover Mega-Dropdown: Company / Leadership */}
+            {hoveredMenu === 'company' && (
+              <div
+                className="absolute right-0 mt-2 w-[580px] bg-[#090d16]/98 border border-cyan-500/30 rounded-2xl shadow-2xl p-5 backdrop-blur-xl ring-1 ring-cyan-500/20 z-50 animate-in fade-in zoom-in-95 duration-150"
+                onMouseEnter={() => handleMouseEnter('company')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                  <span className="text-xs font-mono uppercase text-slate-300 font-semibold flex items-center gap-2">
+                    <Users className="w-4 h-4 text-cyan-400" />
+                    Vectorbound Advisory & Methodology
+                  </span>
+                  <span className="text-[11px] font-mono text-slate-400">Ex-FAANG Principals</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'team')}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <Users className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                      <span>Leadership & Principals</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Senior consultants with 14+ years experience in cloud security, AI defense, and SRE.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'process')}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <GitBranch className="w-4 h-4 text-teal-400 group-hover:scale-110 transition-transform" />
+                      <span>6-Stage Engagement Lifecycle</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Audited methodology minimizing engineering disruption while delivering verifiable controls.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'why-us')}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <ShieldCheck className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                      <span>Why Vectorbound</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Engineering-first differentiation: zero junior staff delegation, zero generic checklists.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company', 'insights')}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-cyan-300 mb-1">
+                      <BookOpen className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+                      <span>Insights & Architecture Reports</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      Deep-dive technical advisories, multi-cloud breach teardowns, and SOC 2 playbooks.
+                    </p>
+                  </button>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-mono">
+                  <span className="text-slate-400">Trusted by fast-growing SaaS & FinTech</span>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick('company')}
+                    className="text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>View Company Overview →</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Contact */}
+          <button
+            type="button"
+            onClick={() => handleSectionClick('contact')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 focus:outline-none ${
+              currentSection === 'contact'
+                ? 'bg-cyan-950/90 text-cyan-300 font-semibold border border-cyan-700/80 shadow-sm shadow-cyan-950'
+                : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
+            }`}
+          >
+            Contact
+          </button>
         </nav>
 
         {/* Header Action Buttons & Language Switcher */}
@@ -265,7 +823,7 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-800 transition-colors focus:outline-none"
+            className="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-800 transition-colors focus:outline-none"
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -277,7 +835,7 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
       {/* Mobile Drawer Overlay Backdrop */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 top-[53px] sm:top-[61px] bg-black/70 backdrop-blur-md z-40 xl:hidden animate-in fade-in duration-200"
+          className="fixed inset-0 top-[53px] sm:top-[61px] bg-black/70 backdrop-blur-md z-40 lg:hidden animate-in fade-in duration-200"
           onClick={() => setMobileMenuOpen(false)}
         >
           {/* Drawer Sheet */}
@@ -318,86 +876,97 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
               </div>
             </div>
 
-            {/* Quick Status Bar */}
-            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-mono">
-              <div className="flex items-center gap-2 text-emerald-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>{t.header.sreNocActive}</span>
+            {/* Subsections & Practices for Mobile */}
+            <div className="space-y-3">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold px-1">
+                Explore Subsections & Standards
               </div>
-              <span className="text-slate-400">{t.header.slaText}</span>
-            </div>
 
-            {/* Primary Section Switcher for Mobile */}
-            <div className="space-y-1.5">
-              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold px-2">
-                Sections & Exploration
+              {/* Services Subsections */}
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                <div className="text-xs font-bold text-cyan-300 font-mono">Services & Practices</div>
+                <div className="grid grid-cols-1 gap-1.5 text-xs text-slate-300">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('ai-security');
+                      handleSectionClick('services');
+                    }}
+                    className="p-2 rounded-lg hover:bg-slate-800 text-left flex items-center justify-between text-slate-200"
+                  >
+                    <span>AI Security & LLM Governance</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-purple-400" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('devsecops');
+                      handleSectionClick('services');
+                    }}
+                    className="p-2 rounded-lg hover:bg-slate-800 text-left flex items-center justify-between text-slate-200"
+                  >
+                    <span>DevSecOps & Supply Chain Gates</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectPractice?.('cloud-security');
+                      handleSectionClick('services');
+                    }}
+                    className="p-2 rounded-lg hover:bg-slate-800 text-left flex items-center justify-between text-slate-200"
+                  >
+                    <span>Multi-Cloud Architecture (AWS, Azure & GCP)</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-sky-400" />
+                  </button>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {sectionTabs.map((tab) => {
-                  const isActive = currentSection === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => handleSectionClick(tab.id)}
-                      className={`p-3 rounded-xl text-xs font-semibold text-left transition-all flex flex-col justify-between gap-1 border cursor-pointer ${
-                        isActive
-                          ? 'bg-cyan-950 border-cyan-400 text-cyan-200 shadow-md shadow-cyan-950'
-                          : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <span className="font-sans">{tab.label}</span>
-                      {tab.badge && (
-                        <span className={`text-[9px] font-mono uppercase px-1.5 py-0.2 rounded w-fit ${
-                          tab.highlight ? 'bg-purple-950 text-purple-300 border border-purple-800' : 'bg-slate-800 text-slate-400'
-                        }`}>
-                          {tab.badge}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
 
-            {/* Quick Deep-Dive Links */}
-            <div className="space-y-2 pt-1 border-t border-slate-800/80">
-              <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold px-2">
-                Direct Feature Shortlinks
-              </div>
-              <div className="grid grid-cols-1 gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => handleSectionClick('cloud-ops', 'multi-cloud-ops')}
-                  className="w-full text-left py-2 px-3 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-900/40 hover:bg-slate-800/60 flex items-center justify-between"
-                >
-                  <span>24/7 Managed SRE & Landing Zones</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSectionClick('cloud-ops', 'finops-optimization')}
-                  className="w-full text-left py-2 px-3 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-900/40 hover:bg-slate-800/60 flex items-center justify-between"
-                >
-                  <span>FinOps Multi-Cloud Cost Reclamation Sandbox</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSectionClick('compliance', 'compliance-tracker')}
-                  className="w-full text-left py-2 px-3 rounded-lg text-xs text-slate-300 hover:text-white bg-slate-900/40 hover:bg-slate-800/60 flex items-center justify-between"
-                >
-                  <span>SOC 2 & ISO 27001 Readiness Rings</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-emerald-400" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSectionClick('risk-tool', 'risk-assessment')}
-                  className="w-full text-left py-2 px-3 rounded-lg text-xs text-purple-200 bg-purple-950/40 border border-purple-800/50 flex items-center justify-between"
-                >
-                  <span>Run Free AI Security Risk Snapshot (D3 Gauge)</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-purple-400" />
-                </button>
+              {/* Compliance Standards Subsections */}
+              <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                <div className="text-xs font-bold text-emerald-300 font-mono">Compliance Frameworks</div>
+                <div className="grid grid-cols-2 gap-1.5 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('soc2');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                  >
+                    SOC 2 Type I & II
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('pci');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                  >
+                    PCI DSS v4.0
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('cis');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                  >
+                    CIS Controls
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('iso27001');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                  >
+                    ISO 27001 & NIS-2
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -425,3 +994,4 @@ export const Header: React.FC<HeaderProps> = ({ currentSection, onNavigate, onBo
     </header>
   );
 };
+

@@ -26,7 +26,7 @@ interface ControlItem {
   code: string;
   title: string;
   domain: string;
-  framework: 'soc2' | 'iso27001' | 'both';
+  framework: 'soc2' | 'pci' | 'cis' | 'iso27001' | 'both';
   status: 'passed' | 'in_progress' | 'gap';
   automatedCollector: string;
   evidenceSource: string;
@@ -45,7 +45,18 @@ interface DomainProgress {
 }
 
 const INITIAL_CONTROLS: ControlItem[] = [
-  // SOC 2 Trust Services Criteria
+  // SOC 2 Type I & Type II Criteria
+  {
+    id: 'soc-type1-design',
+    code: 'SOC2-T1',
+    title: 'SOC 2 Type I Point-in-Time Control Design & Policy Framework',
+    domain: 'Governance & Audit',
+    framework: 'soc2',
+    status: 'passed',
+    automatedCollector: 'AWS Config / Azure Policy / GCP SCC',
+    evidenceSource: 'Audited TSC control design package & AICPA auditor sign-off',
+    criticality: 'Critical',
+  },
   {
     id: 'soc-cc61',
     code: 'CC6.1',
@@ -53,30 +64,30 @@ const INITIAL_CONTROLS: ControlItem[] = [
     domain: 'Security & Access',
     framework: 'soc2',
     status: 'passed',
-    automatedCollector: 'Okta / Entra ID API',
-    evidenceSource: 'Hardware token enforcement logs (100% MFA)',
+    automatedCollector: 'Okta / Azure Entra ID API / AWS IAM',
+    evidenceSource: 'Hardware token enforcement logs (100% MFA across AWS/Azure/GCP)',
     criticality: 'Critical',
   },
   {
     id: 'soc-cc66',
     code: 'CC6.6',
-    title: 'Boundary Protection, Firewalls & Network Isolation',
+    title: 'Boundary Protection, Multi-Cloud Firewalls & Network Isolation',
     domain: 'Security & Access',
     framework: 'soc2',
     status: 'passed',
-    automatedCollector: 'AWS Network Firewall / GCP VPC',
-    evidenceSource: 'Transit Gateway route tables & strict egress rules',
+    automatedCollector: 'AWS Network Firewall / Azure Firewall / GCP VPC',
+    evidenceSource: 'Transit Gateway & Azure ExpressRoute route tables with strict egress rules',
     criticality: 'High',
   },
   {
     id: 'soc-cc71',
     code: 'CC7.1',
-    title: 'Vulnerability Detection & Container Image Scanning',
+    title: 'Vulnerability Detection & Multi-Cloud Container Image Scanning',
     domain: 'Operations & Monitoring',
     framework: 'soc2',
     status: 'passed',
-    automatedCollector: 'Trivy / ECR Image Scanning',
-    evidenceSource: 'Zero CVE-High in production registries within 14-day SLA',
+    automatedCollector: 'Trivy / ECR / Azure Container Registry / Artifact Registry',
+    evidenceSource: 'Zero CVE-High in EKS, AKS, and GKE production registries within 14-day SLA',
     criticality: 'High',
   },
   {
@@ -86,7 +97,7 @@ const INITIAL_CONTROLS: ControlItem[] = [
     domain: 'Operations & Monitoring',
     framework: 'soc2',
     status: 'in_progress',
-    automatedCollector: 'Datadog SIEM / AWS CloudWatch',
+    automatedCollector: 'Datadog SIEM / Azure Sentinel / AWS CloudWatch',
     evidenceSource: 'P1 alarm routing and bi-weekly tabletop drill artifacts',
     criticality: 'Critical',
   },
@@ -101,38 +112,97 @@ const INITIAL_CONTROLS: ControlItem[] = [
     evidenceSource: 'Mandatory 2-reviewer approvals on main branch',
     criticality: 'High',
   },
+
+  // PCI DSS v4.0 Gap Assessment Controls
   {
-    id: 'soc-a12',
-    code: 'A1.2',
-    title: 'Multi-AZ Redundancy & Automated Backup Verification',
-    domain: 'Availability & BCP',
-    framework: 'soc2',
-    status: 'in_progress',
-    automatedCollector: 'AWS Backup / GCP Snapshotter',
-    evidenceSource: 'Daily immutable snapshots with monthly restore trials',
-    criticality: 'High',
-  },
-  {
-    id: 'soc-c11',
-    code: 'C1.1',
-    title: 'Data-at-Rest & In-Transit KMS Cryptographic Envelope',
-    domain: 'Confidentiality',
-    framework: 'soc2',
+    id: 'pci-12',
+    code: 'PCI-1.2',
+    title: 'PCI DSS Cardholder Data Environment (CDE) Micro-segmentation',
+    domain: 'Data Protection & CDE',
+    framework: 'pci',
     status: 'passed',
-    automatedCollector: 'AWS KMS / HashiCorp Vault',
-    evidenceSource: 'AES-256-GCM customer-managed keys with annual rotation',
+    automatedCollector: 'Azure VNet / AWS Transit Gateway / GCP VPC-SC',
+    evidenceSource: 'Isolated CDE subnet boundaries with denied cross-tenant traffic logs',
     criticality: 'Critical',
   },
   {
-    id: 'soc-p11',
-    code: 'P1.1',
-    title: 'PII Scrubbing & Synthetic Data Generation in Staging',
-    domain: 'Privacy & Data Governance',
-    framework: 'soc2',
-    status: 'gap',
-    automatedCollector: 'Database Proxy Sanitizer',
-    evidenceSource: 'Pending automated mask pipeline for developer test suites',
-    criticality: 'Medium',
+    id: 'pci-34',
+    code: 'PCI-3.4',
+    title: 'Primary Account Number (PAN) Cryptographic Envelope & Tokenization',
+    domain: 'Data Protection & CDE',
+    framework: 'pci',
+    status: 'passed',
+    automatedCollector: 'Azure Key Vault HSM / AWS KMS / HashiCorp Vault',
+    evidenceSource: 'AES-256-GCM customer-managed keys with automated key rotation',
+    criticality: 'Critical',
+  },
+  {
+    id: 'pci-63',
+    code: 'PCI-6.3',
+    title: 'PCI DSS Automated Software Vulnerability & Dependency Patch SLA',
+    domain: 'Vulnerability Management',
+    framework: 'pci',
+    status: 'in_progress',
+    automatedCollector: 'Snyk / Trivy / Microsoft Defender for Cloud',
+    evidenceSource: '14-day mandatory remediation SLA for critical payment pipeline CVEs',
+    criticality: 'High',
+  },
+  {
+    id: 'pci-102',
+    code: 'PCI-10.2',
+    title: 'Automated Audit Trail Generation & Real-time Log Immutability',
+    domain: 'Audit & Telemetry',
+    framework: 'pci',
+    status: 'passed',
+    automatedCollector: 'AWS CloudTrail / Azure Monitor / GCP Cloud Logging',
+    evidenceSource: 'WORM immutable log storage buckets with cryptographic hash validation',
+    criticality: 'Critical',
+  },
+
+  // CIS Controls Implementation (v8 / CIS Benchmarks)
+  {
+    id: 'cis-33',
+    code: 'CIS-3.3',
+    title: 'CIS Control 3.3: Data Protection & Cloud Storage Encryption Enforcement',
+    domain: 'CIS Benchmarks',
+    framework: 'cis',
+    status: 'passed',
+    automatedCollector: 'CIS Foundations Benchmark (AWS / Azure / GCP)',
+    evidenceSource: '100% enforcement of public access blocks & customer-managed key encryption',
+    criticality: 'High',
+  },
+  {
+    id: 'cis-41',
+    code: 'CIS-4.1',
+    title: 'CIS Control 4.1: Secure Workload Configuration & IaC Policy Guardrails',
+    domain: 'CIS Benchmarks',
+    framework: 'cis',
+    status: 'passed',
+    automatedCollector: 'Terraform / Bicep Policy as Code (OPA / Kyverno)',
+    evidenceSource: 'Pre-deployment PR gate blocking CIS Level 1 & 2 benchmark violations',
+    criticality: 'Critical',
+  },
+  {
+    id: 'cis-61',
+    code: 'CIS-6.1',
+    title: 'CIS Control 6.1: Access Control & Least Privilege IAM Graph Auditing',
+    domain: 'CIS Benchmarks',
+    framework: 'cis',
+    status: 'in_progress',
+    automatedCollector: 'Azure Entra PIM / AWS IAM Access Analyzer / GCP IAM',
+    evidenceSource: 'Zero unmonitored wildcard policies & just-in-time elevation workflows',
+    criticality: 'Critical',
+  },
+  {
+    id: 'cis-82',
+    code: 'CIS-8.2',
+    title: 'CIS Control 8.2: Audit Log Retention & Centralized SIEM Ingestion',
+    domain: 'CIS Benchmarks',
+    framework: 'cis',
+    status: 'passed',
+    automatedCollector: 'Azure Sentinel / AWS Security Hub / GCP SCC Premium',
+    evidenceSource: '365-day log retention policy enforced across all cloud tenant subscriptions',
+    criticality: 'High',
   },
 
   // ISO/IEC 27001:2022 Controls
@@ -143,30 +213,19 @@ const INITIAL_CONTROLS: ControlItem[] = [
     domain: 'Organizational Controls',
     framework: 'iso27001',
     status: 'passed',
-    automatedCollector: 'Azure Entra PIM / AWS IAM Identity Center',
-    evidenceSource: 'Time-bound just-in-time privilege elevations',
+    automatedCollector: 'Azure Entra PIM / AWS IAM Identity Center / GCP Workload Identity',
+    evidenceSource: 'Time-bound just-in-time privilege elevations with manager sign-off',
     criticality: 'Critical',
   },
   {
     id: 'iso-a523',
     code: 'A.5.23',
-    title: 'Information Security in Use of Cloud Services',
+    title: 'Information Security in Use of Multi-Cloud Services',
     domain: 'Organizational Controls',
     framework: 'iso27001',
     status: 'passed',
-    automatedCollector: 'CloudTrail / Google Cloud Audit Logs',
-    evidenceSource: 'Preventative SCPs blocking unauthorized regions & public buckets',
-    criticality: 'High',
-  },
-  {
-    id: 'iso-a88',
-    code: 'A.8.8',
-    title: 'Management of Technical Vulnerabilities',
-    domain: 'Technological Controls',
-    framework: 'iso27001',
-    status: 'in_progress',
-    automatedCollector: 'Wiz / Snyk / Dependabot',
-    evidenceSource: 'Automated PR remediation for vulnerable dependencies',
+    automatedCollector: 'AWS Security Hub / Azure Policy / GCP Org Policies',
+    evidenceSource: 'Preventative SCPs blocking unauthorized regions, unencrypted disks & public buckets',
     criticality: 'High',
   },
   {
@@ -176,31 +235,9 @@ const INITIAL_CONTROLS: ControlItem[] = [
     domain: 'Technological Controls',
     framework: 'iso27001',
     status: 'passed',
-    automatedCollector: 'Calico / Cilium eBPF Network Policies',
-    evidenceSource: 'Zero-trust pod-to-pod mutual TLS and egress whitelisting',
+    automatedCollector: 'Cilium eBPF / Azure CNI / AWS Transit Gateway',
+    evidenceSource: 'Zero-trust pod-to-pod mutual TLS and egress whitelisting across EKS, AKS & GKE',
     criticality: 'Critical',
-  },
-  {
-    id: 'iso-a824',
-    code: 'A.8.24',
-    title: 'Use of Cryptography & Key Management Lifecycle',
-    domain: 'Technological Controls',
-    framework: 'iso27001',
-    status: 'passed',
-    automatedCollector: 'Cloud KMS Key Audit',
-    evidenceSource: 'FIPS 140-3 Level 3 Hardware Security Modules',
-    criticality: 'High',
-  },
-  {
-    id: 'iso-a68',
-    code: 'A.6.8',
-    title: 'Information Security Event Reporting & Incident Retrospectives',
-    domain: 'People & Operations',
-    framework: 'iso27001',
-    status: 'in_progress',
-    automatedCollector: 'Jira Service Management / PagerDuty',
-    evidenceSource: 'Blameless post-mortem repository with tracked remediations',
-    criticality: 'Medium',
   },
   {
     id: 'iso-a828',
@@ -209,8 +246,8 @@ const INITIAL_CONTROLS: ControlItem[] = [
     domain: 'Technological Controls',
     framework: 'iso27001',
     status: 'passed',
-    automatedCollector: 'Semgrep / SonarQube CI Gate',
-    evidenceSource: '100% build rejection for OWASP Top 10 rule matches',
+    automatedCollector: 'Semgrep / SonarQube / GitHub Security',
+    evidenceSource: '100% build rejection for OWASP Top 10 rule matches in CI/CD',
     criticality: 'High',
   },
   {
@@ -220,18 +257,35 @@ const INITIAL_CONTROLS: ControlItem[] = [
     domain: 'Organizational Controls',
     framework: 'iso27001',
     status: 'gap',
-    automatedCollector: 'Chaos Mesh / AWS Fault Injection',
-    evidenceSource: 'Regional failover drill scheduled for Q3 audit cycle',
+    automatedCollector: 'Chaos Mesh / AWS Fault Injection / Azure Chaos Studio',
+    evidenceSource: 'Multi-region failover drill scheduled for Q3 audit cycle',
     criticality: 'High',
   },
 ];
 
-export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenConsultation, isLoading = false }) => {
-  const [activeTab, setActiveTab] = useState<'all' | 'soc2' | 'iso27001'>('all');
+interface ComplianceTrackerProps {
+  onOpenConsultation?: (topic?: string) => void;
+  isLoading?: boolean;
+  activeFrameworkTab?: 'all' | 'soc2' | 'pci' | 'cis' | 'iso27001';
+}
+
+export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({
+  onOpenConsultation,
+  isLoading = false,
+  activeFrameworkTab = 'all',
+}) => {
+  const [activeTab, setActiveTab] = useState<'all' | 'soc2' | 'pci' | 'cis' | 'iso27001'>(activeFrameworkTab);
   const [controls, setControls] = useState<ControlItem[]>(INITIAL_CONTROLS);
   const [statusFilter, setStatusFilter] = useState<'all' | 'passed' | 'in_progress' | 'gap'>('all');
   const [selectedControl, setSelectedControl] = useState<ControlItem | null>(null);
   const [readinessStage, setReadinessStage] = useState<'current' | 'remediated' | 'pre_audit'>('current');
+
+  // Sync activeTab when prop changes
+  React.useEffect(() => {
+    if (activeFrameworkTab) {
+      setActiveTab(activeFrameworkTab);
+    }
+  }, [activeFrameworkTab]);
 
   // Toggle control status interactively to test what-if readiness scenarios
   const toggleControlStatus = (id: string) => {
@@ -774,6 +828,28 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               </button>
               <button
                 type="button"
+                onClick={() => setActiveTab('pci')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                  activeTab === 'pci'
+                    ? 'bg-cyan-500 text-slate-950'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
+              >
+                PCI DSS ({controls.filter((c) => c.framework === 'pci').length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('cis')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                  activeTab === 'cis'
+                    ? 'bg-cyan-500 text-slate-950'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
+              >
+                CIS Controls ({controls.filter((c) => c.framework === 'cis').length})
+              </button>
+              <button
+                type="button"
                 onClick={() => setActiveTab('iso27001')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
                   activeTab === 'iso27001'
@@ -814,7 +890,13 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
                       {ctrl.code}
                     </span>
                     <span className="text-[10px] text-slate-400 font-mono uppercase">
-                      {ctrl.framework === 'soc2' ? 'SOC 2' : 'ISO 27001'}
+                      {ctrl.framework === 'soc2'
+                        ? 'SOC 2'
+                        : ctrl.framework === 'pci'
+                        ? 'PCI DSS'
+                        : ctrl.framework === 'cis'
+                        ? 'CIS'
+                        : 'ISO 27001'}
                     </span>
                   </div>
 
@@ -898,7 +980,13 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
                           {ctrl.code}
                         </span>
                         <span className="text-[10px] text-slate-500 uppercase">
-                          {ctrl.framework === 'soc2' ? 'SOC 2' : 'ISO 27001'}
+                          {ctrl.framework === 'soc2'
+                            ? 'SOC 2'
+                            : ctrl.framework === 'pci'
+                            ? 'PCI DSS'
+                            : ctrl.framework === 'cis'
+                            ? 'CIS'
+                            : 'ISO 27001'}
                         </span>
                       </div>
                     </td>

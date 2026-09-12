@@ -65,6 +65,7 @@ function AppContent() {
   const [currentSection, setCurrentSection] = useState<AppSection>('overview');
   const [selectedService, setSelectedService] = useState<ServiceDetail | null>(null);
   const [selectedFilterPractice, setSelectedFilterPractice] = useState<string | null>(null);
+  const [activeComplianceTab, setActiveComplianceTab] = useState<'all' | 'soc2' | 'pci' | 'cis' | 'iso27001'>('all');
   const [prefilledConsultation, setPrefilledConsultation] = useState<{
     score: number;
     tier: string;
@@ -215,6 +216,11 @@ function AppContent() {
         currentSection={currentSection}
         onNavigate={navigateToSection}
         onBookClick={handleBookClick}
+        onSelectPractice={handleSelectPractice}
+        onSelectComplianceTab={(tab) => {
+          setActiveComplianceTab(tab);
+          navigateToSection('compliance');
+        }}
       />
 
       {/* Main Page Area - Rendered conditionally with Framer Motion slide-in transitions */}
@@ -364,7 +370,10 @@ function AppContent() {
 
                 <ErrorBoundary fallbackTitle="Continuous Compliance Matrix">
                   <div id="compliance-tracker">
-                    <ComplianceTracker onOpenConsultation={handleOpenConsultationTopic} />
+                    <ComplianceTracker
+                      onOpenConsultation={handleOpenConsultationTopic}
+                      activeFrameworkTab={activeComplianceTab}
+                    />
                   </div>
                 </ErrorBoundary>
               </div>
