@@ -90,6 +90,7 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
       'Mapping prompt injection & RAG attack vectors...',
       'Evaluating cross-tenant data isolation & IAM roles...',
       'Synthesizing risk matrix and compliance baseline...',
+      'Formatting prioritized remediation architecture...',
     ];
     let phaseIndex = 0;
     setLoadingPhase(phases[0]);
@@ -99,11 +100,15 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
       setLoadingPhase(phases[phaseIndex]);
     }, 1100);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
     try {
       const response = await fetch('/api/assess-risk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(answers),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -111,7 +116,7 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
       }
 
       const data = await response.json();
-      if (data.result) {
+      if (data && data.result) {
         setResult(data.result);
         if (data.result.findings && data.result.findings.length > 0) {
           setExpandedFinding(data.result.findings[0].id);
@@ -121,8 +126,9 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
       }
     } catch (err: any) {
       console.error('Assessment invocation failed:', err);
-      setError('Unable to reach assessment server. Retrying with deterministic heuristic baseline.');
+      setError("We couldn't generate your snapshot — please try again.");
     } finally {
+      clearTimeout(timeoutId);
       clearInterval(intervalId);
       setIsLoading(false);
     }
@@ -212,7 +218,35 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
 
         {/* Diagnostic Container Card */}
         <div className="bg-[#0b0f19] rounded-2xl border border-slate-800/90 shadow-2xl overflow-hidden backdrop-blur-sm">
-          {!result ? (
+          {isLoading ? (
+            /* Prominent Loading Screen */
+            <div className="p-12 sm:p-20 flex flex-col items-center justify-center space-y-6 text-center min-h-[440px]">
+              <div className="relative w-16 h-16">
+                <div className="w-16 h-16 rounded-full border-2 border-slate-800 border-t-cyan-400 animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <ShieldAlert className="w-7 h-7 text-cyan-400 animate-pulse" />
+                </div>
+              </div>
+              <div className="space-y-2 max-w-md">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium tracking-wider uppercase bg-cyan-950/70 border border-cyan-500/40 text-cyan-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                  Analyzing your environment...
+                </div>
+                <h4 className="text-xl font-bold text-white tracking-tight">
+                  Synthesizing Threat Architecture
+                </h4>
+                <p className="text-sm font-mono text-cyan-300 min-h-[24px]">
+                  {loadingPhase}
+                </p>
+              </div>
+              <div className="w-full max-w-xs bg-slate-900 rounded-full h-1.5 overflow-hidden border border-slate-800">
+                <div className="bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 h-full w-3/4 animate-[pulse_1.5s_ease-in-out_infinite]" />
+              </div>
+              <p className="text-xs text-slate-400 max-w-md leading-relaxed">
+                Evaluating attack vectors across {answers.cloudProviders.length} cloud provider{answers.cloudProviders.length > 1 ? 's' : ''} against NIST AI RMF and OWASP Top 10 for LLMs...
+              </p>
+            </div>
+          ) : !result ? (
             <div>
               {/* Progress Bar & Steps Indicator */}
               <div className="border-b border-slate-800 bg-[#090d16] px-6 py-4 flex items-center justify-between">
@@ -248,6 +282,22 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
 
               {/* Step Question Bodies */}
               <div className="p-6 sm:p-10 min-h-[360px] flex flex-col justify-between">
+                {/* Error Banner if any */}
+                {error && (
+                  <div className="mb-6 p-4 rounded-xl bg-red-950/50 border border-red-500/50 text-xs text-red-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg shadow-red-950/40">
+                    <div className="flex items-center gap-2.5">
+                      <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+                      <span className="font-medium">{error}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRunAssessment}
+                      className="px-3 py-1.5 rounded-lg bg-red-900 hover:bg-red-800 text-white font-medium transition-colors cursor-pointer text-xs shrink-0"
+                    >
+                      Retry Snapshot
+                    </button>
+                  </div>
+                )}
                 {/* Step 1: AI Features */}
                 {currentStep === 1 && (
                   <div className="space-y-6">
@@ -750,7 +800,7 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
                     <AlertTriangle className="w-4 h-4 text-amber-400" />
                     Prioritized Technical Findings ({result.findings.length})
                   </h4>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-slate-400">
                     Ranked by immediate adversarial exploitability
                   </span>
                 </div>
@@ -776,7 +826,7 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
                           className="w-full p-4 text-left flex items-start justify-between gap-4 cursor-pointer"
                         >
                           <div className="flex items-start gap-3">
-                            <span className="font-mono text-xs text-slate-500 mt-0.5">
+                            <span className="font-mono text-xs text-slate-400 mt-0.5 font-semibold">
                               0{index + 1}
                             </span>
                             <div>
@@ -875,39 +925,6 @@ export const RiskAssessmentTool: React.FC<RiskAssessmentToolProps> = ({ onSelect
                   <strong className="text-slate-300">Methodology Notice:</strong> This snapshot is a directional self-assessment based on architectural heuristics and generative threat modeling. It is not an official penetration test, audit attestation, or substitute for a hands-on adversarial threat modeling engagement.
                 </p>
               </div>
-            </div>
-          )}
-
-          {/* Loading Overlay */}
-          {isLoading && (
-            <div className="p-16 flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="relative w-12 h-12">
-                <div className="w-12 h-12 rounded-full border-2 border-slate-800 border-t-blue-500 animate-spin" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <ShieldAlert className="w-5 h-5 text-blue-400" />
-                </div>
-              </div>
-              <div>
-                <h4 className="text-base font-semibold text-white">Analyzing Architecture</h4>
-                <p className="text-xs font-mono text-blue-400 mt-1">{loadingPhase}</p>
-              </div>
-              <p className="text-xs text-slate-500 max-w-sm">
-                Running prompt injection taxonomy matrix against {answers.cloudProviders.length} cloud provider environments...
-              </p>
-            </div>
-          )}
-
-          {/* Error Notice */}
-          {error && !isLoading && (
-            <div className="p-4 m-6 bg-red-950/40 border border-red-800/60 rounded-xl text-xs text-red-300 flex items-center justify-between">
-              <span>{error}</span>
-              <button
-                type="button"
-                onClick={handleRunAssessment}
-                className="underline font-semibold hover:text-white ml-3"
-              >
-                Retry
-              </button>
             </div>
           )}
         </div>

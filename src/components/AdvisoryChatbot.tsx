@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
+import { useApp } from '../context/AppContext';
 import {
   MessageSquare,
   X,
@@ -20,16 +21,9 @@ interface AdvisoryChatbotProps {
   onOpenConsultation?: (topic?: string) => void;
 }
 
-const DEFAULT_MESSAGES: ChatMessage[] = [
-  {
-    id: 'welcome-msg',
-    role: 'assistant',
-    content: "Welcome to SecureStack Advisory. I am your Lead Cloud & Security Advisory Engineer. Ask me anything regarding Multi-Cloud Architecture (AWS, GCP, Azure), 24/7 Managed SRE Operations, Agile DevOps/GitOps deployment pipelines, FinOps cost reduction, or AI Threat Modeling. All queries are backed by real-time Google Search grounding.",
-    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-  },
-];
+const DEFAULT_WELCOME = "Welcome to SecureStack Advisory. I am your Lead Cloud & Security Advisory Engineer. Ask me anything regarding Multi-Cloud Architecture (AWS, GCP, Azure), 24/7 Managed SRE Operations, Agile DevOps/GitOps deployment pipelines, FinOps cost reduction, or AI Threat Modeling. All queries are backed by real-time Google Search grounding.";
 
-const SUGGESTED_PROMPTS = [
+const DEFAULT_PROMPTS = [
   "How can we reduce AWS NAT Gateway transfer costs?",
   "Azure Landing Zones vs AWS Control Tower key differences",
   "Trunk-based deployment pipeline with automated canary rollback",
@@ -38,15 +32,42 @@ const SUGGESTED_PROMPTS = [
 ];
 
 export const AdvisoryChatbot: React.FC<AdvisoryChatbotProps> = ({ onOpenConsultation }) => {
+  const { t, language } = useApp();
+  const welcomeText = t?.chatbot?.welcome || DEFAULT_WELCOME;
+  const promptsList = t?.chatbot?.prompts || DEFAULT_PROMPTS;
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>(DEFAULT_MESSAGES);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    {
+      id: 'welcome-msg',
+      role: 'assistant',
+      content: welcomeText,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    },
+  ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [enableSearch, setEnableSearch] = useState(true);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // If conversation only contains welcome message, refresh it when language switches
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].id === 'welcome-msg') {
+        return [
+          {
+            id: 'welcome-msg',
+            role: 'assistant',
+            content: welcomeText,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          },
+        ];
+      }
+      return prev;
+    });
+  }, [welcomeText]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -88,6 +109,7 @@ export const AdvisoryChatbot: React.FC<AdvisoryChatbotProps> = ({ onOpenConsulta
         body: JSON.stringify({
           messages: payloadMessages,
           enableSearch,
+          language,
         }),
       });
 
@@ -122,97 +144,129 @@ export const AdvisoryChatbot: React.FC<AdvisoryChatbotProps> = ({ onOpenConsulta
   };
 
   const handleResetChat = () => {
-    setMessages(DEFAULT_MESSAGES);
+    setMessages([
+      {
+        id: `welcome-${Date.now()}`,
+        role: 'assistant',
+        content: welcomeText,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      },
+    ]);
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      {/* Floating Trigger Button */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-cyan-600 via-teal-600 to-cyan-500 text-slate-950 font-mono text-xs font-bold shadow-2xl shadow-cyan-500/40 hover:scale-105 transition-all cursor-pointer border border-cyan-300/40"
-        >
-          <div className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-950 opacity-75" />
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-slate-950" />
-          </div>
-          <Bot className="w-4 h-4 text-slate-950" />
-          <span>Ask AI Cloud Advisor</span>
-          <span className="text-[10px] bg-slate-950/80 text-cyan-300 px-1.5 py-0.5 rounded font-mono">
-            Grounding ON
-          </span>
-        </button>
-      )}
-
-      {/* Expandable Chat Window */}
+    <>
+      {/* Mobile Backdrop when open */}
       {isOpen && (
         <div
-          className={`flex flex-col bg-[#0b0f19] border border-cyan-500/40 rounded-2xl shadow-2xl shadow-cyan-950/50 overflow-hidden transition-all duration-200 ${
-            isExpanded
-              ? 'w-[95vw] sm:w-[650px] h-[85vh] max-h-[750px]'
-              : 'w-[92vw] sm:w-[460px] h-[600px] max-h-[82vh]'
-          }`}
-        >
-          {/* Header */}
-          <div className="p-4 bg-gradient-to-r from-[#0d1322] via-[#090d16] to-[#0d1322] border-b border-slate-800 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
-                <Bot className="w-4 h-4" />
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 sm:hidden animate-in fade-in duration-150"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <div className={`fixed z-50 ${isOpen ? 'inset-x-0 bottom-0 top-10 sm:inset-auto sm:bottom-6 sm:right-6' : 'bottom-4 right-4 sm:bottom-6 sm:right-6'}`}>
+        {/* Floating Trigger Button (Compact Icon) */}
+        {!isOpen && (
+          <div className="relative group">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-cyan-500 via-teal-400 to-cyan-300 text-slate-950 shadow-xl shadow-cyan-500/35 hover:shadow-cyan-400/50 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer border border-cyan-200/60 flex items-center justify-center"
+              aria-label="Open AI Cloud & Cyber Advisor"
+              title="Open AI Cloud & Cyber Advisor"
+            >
+              {/* Online pulse beacon */}
+              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-slate-950" />
+              </span>
+
+              {/* Bot Icon */}
+              <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-slate-950 transition-transform group-hover:rotate-6" />
+            </button>
+
+            {/* Desktop Tooltip */}
+            <div className="hidden sm:block absolute right-full mr-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap z-50">
+              <div className="px-2.5 py-1 rounded-lg bg-slate-900/95 border border-slate-700/80 text-cyan-300 text-xs font-mono shadow-xl flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                {t?.chatbot?.askPill || 'Ask AI Advisor'}
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
-                    Cloud & Cyber Advisor
-                  </span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 border border-emerald-800 text-emerald-300">
-                    Live
-                  </span>
-                </div>
-                <div className="text-[11px] text-slate-400">
-                  AWS · GCP · Azure · DevOps · FinOps
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setEnableSearch(!enableSearch)}
-                title={enableSearch ? 'Search Grounding Active' : 'Search Grounding Inactive'}
-                className={`p-1.5 rounded-md text-xs font-mono transition-colors cursor-pointer ${
-                  enableSearch
-                    ? 'text-cyan-400 bg-cyan-950/60 border border-cyan-800/60'
-                    : 'text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                <Search className="w-3.5 h-3.5" />
-              </button>
-
-              <button
-                onClick={handleResetChat}
-                title="Reset Conversation"
-                className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                title={isExpanded ? 'Minimize size' : 'Expand window'}
-                className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors cursor-pointer hidden sm:inline-flex"
-              >
-                {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-              </button>
-
-              <button
-                onClick={() => setIsOpen(false)}
-                title="Close chat"
-                className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
             </div>
           </div>
+        )}
+
+        {/* Expandable Full Chat Window / Mobile Bottom Sheet */}
+        {isOpen && (
+          <div
+            className={`flex flex-col bg-[#0b0f19] border border-cyan-500/40 sm:rounded-2xl rounded-t-2xl shadow-2xl shadow-cyan-950/60 overflow-hidden transition-all duration-200 h-full sm:h-auto animate-in fade-in zoom-in-95 ${
+              isExpanded
+                ? 'w-full sm:w-[660px] sm:h-[85vh] sm:max-h-[760px]'
+                : 'w-full sm:w-[480px] sm:h-[620px] sm:max-h-[85vh]'
+            }`}
+          >
+            {/* Mobile Sheet Pull Bar */}
+            <div className="sm:hidden flex items-center justify-center pt-2 pb-1 bg-[#0d1322]">
+              <div className="w-10 h-1 rounded-full bg-slate-700" />
+            </div>
+
+            {/* Header */}
+            <div className="p-3.5 sm:p-4 bg-gradient-to-r from-[#0d1322] via-[#090d16] to-[#0d1322] border-b border-slate-800 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+                  <Bot className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                      {t?.chatbot?.title || 'Cloud & Cyber Advisor'}
+                    </span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-950 border border-emerald-800 text-emerald-300">
+                      Live
+                    </span>
+                  </div>
+                  <div className="text-[10px] sm:text-[11px] text-slate-400">
+                    {t?.chatbot?.subtitle || 'AWS · GCP · Azure · DevOps · FinOps'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setEnableSearch(!enableSearch)}
+                  title={enableSearch ? 'Search Grounding Active' : 'Search Grounding Inactive'}
+                  className={`p-1.5 rounded-md text-xs font-mono transition-colors cursor-pointer ${
+                    enableSearch
+                      ? 'text-cyan-400 bg-cyan-950/60 border border-cyan-800/60'
+                      : 'text-slate-500 hover:text-slate-300'
+                  }`}
+                >
+                  <Search className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  onClick={handleResetChat}
+                  title="Reset Conversation"
+                  className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  title={isExpanded ? 'Minimize size' : 'Expand window'}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors cursor-pointer hidden sm:inline-flex"
+                >
+                  {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+                </button>
+
+                <button
+                  onClick={() => setIsOpen(false)}
+                  title="Close chat"
+                  className="p-1.5 text-slate-400 hover:text-white rounded-md hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
 
           {/* Messages Scroll Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-cyber-grid bg-[#080b12]">
@@ -301,10 +355,10 @@ export const AdvisoryChatbot: React.FC<AdvisoryChatbotProps> = ({ onOpenConsulta
           {messages.length <= 3 && (
             <div className="p-2.5 bg-[#090d16] border-t border-slate-800 overflow-x-auto">
               <div className="text-[10px] font-mono uppercase text-slate-400 mb-1.5 px-1">
-                Suggested Architecture Queries:
+                {t?.chatbot?.suggestedQueriesLabel || 'Suggested Architecture Queries:'}
               </div>
               <div className="flex gap-1.5 pb-1">
-                {SUGGESTED_PROMPTS.map((prompt, pIdx) => (
+                {promptsList.map((prompt, pIdx) => (
                   <button
                     key={pIdx}
                     onClick={() => handleSendMessage(prompt)}
@@ -318,50 +372,52 @@ export const AdvisoryChatbot: React.FC<AdvisoryChatbotProps> = ({ onOpenConsulta
             </div>
           )}
 
-          {/* Input Box */}
-          <div className="p-3 bg-[#0d1322] border-t border-slate-800">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSendMessage();
-              }}
-              className="flex items-center gap-2"
-            >
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask about AWS, GCP, Azure, GitOps, or FinOps..."
-                disabled={isLoading}
-                className="flex-1 bg-slate-900 border border-slate-700/80 focus:border-cyan-400 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none transition-colors"
-              />
-
-              <button
-                type="submit"
-                disabled={!inputValue.trim() || isLoading}
-                className="p-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-slate-950 font-bold transition-colors cursor-pointer shrink-0"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </form>
-
-            <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono mt-2 px-1">
-              <span>Powered by Gemini 3.8 + Search Grounding</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  onOpenConsultation?.('AI Advisory Followup');
+            {/* Input Box */}
+            <div className="p-2.5 sm:p-3 bg-[#0d1322] border-t border-slate-800 shrink-0">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage();
                 }}
-                className="text-cyan-400 hover:underline cursor-pointer"
+                className="flex items-center gap-2"
               >
-                Book Human Principal Review →
-              </button>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder={t?.chatbot?.inputPlaceholder || 'Ask about AWS, GCP, Azure, GitOps, or FinOps...'}
+                  disabled={isLoading}
+                  className="flex-1 bg-slate-900 border border-slate-700/80 focus:border-cyan-400 rounded-lg px-3 py-2 text-sm sm:text-xs text-white placeholder-slate-500 focus:outline-none transition-colors"
+                />
+
+                <button
+                  type="submit"
+                  disabled={!inputValue.trim() || isLoading}
+                  className="p-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-slate-950 font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label="Send query"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[10px] text-slate-500 font-mono mt-2 px-1 gap-1">
+                <span>Gemini 3.8 + Search Grounding</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    onOpenConsultation?.('AI Advisory Followup');
+                  }}
+                  className="text-cyan-400 hover:underline cursor-pointer text-left"
+                >
+                  {t?.chatbot?.bookHumanCta || 'Book Human Principal Review'} →
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };

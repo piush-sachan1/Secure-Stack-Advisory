@@ -27,29 +27,29 @@ export const PracticesOverview: React.FC<PracticesOverviewProps> = ({ onSelectPr
   };
 
   return (
-    <section id="practices" className="py-20 bg-[#07090e] text-slate-100 border-b border-slate-800 relative">
+    <section id="practices" className="py-16 sm:py-20 bg-[#07090e] text-slate-100 border-b border-slate-800 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-4">
           <div>
             <div className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-semibold mb-2">
               Core Technical Disciplines
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
               Seven Specialized Advisory Practices
             </h2>
           </div>
-          <p className="text-slate-400 text-sm max-w-md">
+          <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed">
             We intentionally restrict our advisory scope to hyperscalers, agile delivery pipelines, FinOps unit economics, and AI architectures where our principals have shipped production systems.
           </p>
         </div>
 
         {/* Practice Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {PRACTICES.map((practice) => (
             <div
               key={practice.id}
-              className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-cyan-950/20"
+              className="p-5 sm:p-6 rounded-2xl bg-slate-900/40 border border-slate-800/80 hover:border-cyan-500/40 transition-all flex flex-col justify-between group hover:shadow-xl hover:shadow-cyan-950/20"
             >
               <div>
                 <div className="flex items-center justify-between mb-5">

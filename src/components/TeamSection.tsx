@@ -1,6 +1,7 @@
 import React from 'react';
 import { CONSULTANTS } from '../data/contentData';
 import { MapPin, Award, CheckCircle2, Shield } from 'lucide-react';
+import { ProgressiveImage } from './ProgressiveImage';
 
 export const TeamSection: React.FC = () => {
   return (
@@ -29,9 +30,19 @@ export const TeamSection: React.FC = () => {
               <div>
                 {/* Avatar / Monogram Header */}
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-950 border border-slate-700 flex items-center justify-center font-mono font-bold text-lg text-blue-400 shadow-inner">
-                    {member.avatarSeed}
-                  </div>
+                  {member.imageUrl ? (
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden border border-cyan-500/40 shrink-0 shadow-md">
+                      <ProgressiveImage
+                        src={member.imageUrl}
+                        alt={member.name}
+                        aspectRatio="aspect-square"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-950 border border-slate-700 flex items-center justify-center font-mono font-bold text-lg text-blue-400 shadow-inner shrink-0">
+                      {member.avatarSeed}
+                    </div>
+                  )}
                   <div>
                     <h3 className="text-lg font-bold text-white leading-tight">
                       {member.name}

@@ -5,6 +5,21 @@
     scroll-behavior: smooth;
     background-color: #07090e;
     color: #e2e8f0;
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Offset fixed sticky header for smooth anchor jumps */
+  section {
+    scroll-margin-top: 5rem;
   }
 
   ::selection {
@@ -43,4 +58,54 @@
 .bg-cyber-radial {
   background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.12) 0%, rgba(245, 158, 11, 0.03) 45%, transparent 70%);
 }
+
+/* ========================================================================== */
+/* TEMPORARY THEME PREVIEW STYLES (Will be removed once design is finalized)   */
+/* ========================================================================== */
+[data-theme="deep-navy"] html,
+[data-theme="deep-navy"] body {
+  background-color: #040914;
+}
+[data-theme="deep-navy"] .bg-cyber-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, rgba(37, 99, 235, 0.04) 45%, transparent 70%);
+}
+
+[data-theme="emerald-matrix"] html,
+[data-theme="emerald-matrix"] body {
+  background-color: #030d07;
+}
+[data-theme="emerald-matrix"] .bg-cyber-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.04) 45%, transparent 70%);
+}
+[data-theme="emerald-matrix"] ::selection {
+  background-color: #10b981;
+  color: #030d07;
+}
+
+[data-theme="obsidian-gold"] html,
+[data-theme="obsidian-gold"] body {
+  background-color: #0a0907;
+}
+[data-theme="obsidian-gold"] .bg-cyber-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.04) 45%, transparent 70%);
+}
+[data-theme="obsidian-gold"] ::selection {
+  background-color: #f59e0b;
+  color: #0a0907;
+}
+
+[data-theme="light-titanium"] html,
+[data-theme="light-titanium"] body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+[data-theme="light-titanium"] .bg-cyber-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.08) 0%, rgba(148, 163, 184, 0.05) 45%, transparent 70%);
+}
+[data-theme="light-titanium"] .bg-cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+}
+
 

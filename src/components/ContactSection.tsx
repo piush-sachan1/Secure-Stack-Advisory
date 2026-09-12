@@ -60,26 +60,26 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   return (
-    <section id="contact" className="py-24 bg-slate-950 text-slate-100 relative">
+    <section id="contact" className="py-16 sm:py-24 bg-slate-950 text-slate-100 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Restated Value Prop / Final CTA Band */}
-        <div className="mb-16 p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 border border-slate-800 text-center space-y-6 shadow-2xl relative overflow-hidden">
-          <div className="max-w-3xl mx-auto space-y-4">
+        <div className="mb-12 sm:mb-16 p-6 sm:p-12 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 border border-slate-800 text-center space-y-4 sm:space-y-6 shadow-2xl relative overflow-hidden">
+          <div className="max-w-3xl mx-auto space-y-3 sm:space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider bg-blue-500/20 text-blue-400 border border-blue-500/30">
               <ShieldCheck className="w-4 h-4" />
               Direct Principal Access
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
               Ready to eliminate critical attack surfaces before your adversaries find them?
             </h2>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-300 text-xs sm:text-base leading-relaxed">
               Book a 30-minute confidential scoping call with a senior security engineer. We will review your architecture under mutual NDA and provide a definitive assessment proposal within 48 hours.
             </p>
           </div>
         </div>
 
         {/* Contact Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12">
           {/* Left Column: Direct Outreach & Confidentiality Details */}
           <div className="lg:col-span-5 space-y-8">
             <div>

@@ -46,6 +46,13 @@ export interface PracticeArea {
   icon: string;
 }
 
+export interface RelatedServiceItem {
+  id: string;
+  title: string;
+  tagline: string;
+  practice: string;
+}
+
 export interface ServiceDetail {
   id: string;
   practiceId: string;
@@ -62,6 +69,7 @@ export interface ServiceDetail {
     question: string;
     answer: string;
   }[];
+  relatedServices?: RelatedServiceItem[];
   tags: string[];
 }
 
@@ -70,6 +78,7 @@ export interface ConsultantProfile {
   role: string;
   location: string;
   avatarSeed: string;
+  imageUrl?: string;
   bio: string;
   certifications: string[];
   specialties: string[];
@@ -97,6 +106,7 @@ export interface InsightPost {
     role: string;
   };
   keyTakeaways: string[];
+  imageUrl?: string;
 }
 
 export interface ContactFormData {
@@ -167,3 +177,36 @@ export interface FinOpsOptimizationItem {
   targetMetric: string;
   cloudCoverage: string[];
 }
+
+export type SupportedLanguage = 'en' | 'de' | 'fr';
+
+export type SiteTheme =
+  | 'cyber-obsidian'
+  | 'deep-navy'
+  | 'emerald-matrix'
+  | 'obsidian-gold'
+  | 'light-titanium';
+
+export interface SocialChannelItem {
+  id: 'instagram' | 'facebook' | 'youtube' | 'x';
+  name: string; // The editable channel name / handle (e.g. @securestack.security)
+  url: string;
+  description: string;
+  badge?: string;
+}
+
+export interface SocialChannelsConfig {
+  instagram: SocialChannelItem;
+  facebook: SocialChannelItem;
+  youtube: SocialChannelItem;
+  x: SocialChannelItem;
+}
+
+export type AppSection = 
+  | 'overview' 
+  | 'cloud-ops' 
+  | 'risk-tool' 
+  | 'services' 
+  | 'compliance' 
+  | 'company' 
+  | 'contact';

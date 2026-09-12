@@ -412,7 +412,7 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
   return (
     <section
       id="compliance-tracker"
-      className="py-24 bg-[#07090e] text-slate-100 border-b border-slate-800 relative overflow-hidden"
+      className="py-16 sm:py-24 bg-[#07090e] text-slate-100 border-b border-slate-800 relative overflow-hidden"
     >
       {/* Background cyber grid styling */}
       <div className="absolute inset-0 bg-cyber-grid pointer-events-none opacity-40" />
@@ -420,16 +420,16 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 sm:mb-12 gap-6">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium tracking-wider uppercase bg-cyan-950/70 border border-cyan-500/40 text-cyan-300 mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium tracking-wider uppercase bg-cyan-950/70 border border-cyan-500/40 text-cyan-300 mb-3 sm:mb-4">
               <FileCheck2 className="w-3.5 h-3.5 text-cyan-400" />
               <span>Real-time Compliance & Audit Readiness</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
               SOC 2 Type II & ISO 27001 Compliance Tracker
             </h2>
-            <p className="mt-3 text-slate-300 text-sm sm:text-base leading-relaxed">
+            <p className="mt-2.5 sm:mt-3 text-slate-300 text-xs sm:text-sm lg:text-base leading-relaxed">
               Visualize security posture adherence through continuous automated telemetry across multi-cloud infrastructure.
               Simulate remediation milestones and inspect control evidence packages verified by our accredited lead auditors.
             </p>
@@ -441,7 +441,7 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               type="button"
               id="btn-compliance-gap-consult"
               onClick={() => onOpenConsultation?.('SOC 2 & ISO 27001 Audit Readiness Sprint')}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-semibold text-xs sm:text-sm font-mono flex items-center gap-2 shadow-lg shadow-cyan-950/40 transition-all cursor-pointer"
+              className="w-full sm:w-auto justify-center px-4 py-3 sm:py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 active:scale-98 text-slate-950 font-semibold text-xs sm:text-sm font-mono flex items-center gap-2 shadow-lg shadow-cyan-950/40 transition-all cursor-pointer"
             >
               <span>Book Pre-Audit Readiness Review</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -450,18 +450,18 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
         </div>
 
         {/* Primary Standards Rings Grid (SOC 2 vs ISO 27001 vs Combined) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
           {/* Card 1: SOC 2 Type II */}
           <div
             id="card-soc2-progress"
-            className={`p-6 rounded-2xl border transition-all ${
+            className={`p-5 sm:p-6 rounded-2xl border transition-all ${
               activeTab === 'soc2'
                 ? 'bg-gradient-to-b from-cyan-950/40 to-[#0b0f19] border-cyan-500/50 shadow-xl shadow-cyan-950/30 ring-1 ring-cyan-500/30'
                 : 'bg-[#0b0f19] border-slate-800 hover:border-slate-700'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800 flex items-center justify-center">
                   <ShieldCheck className="w-4 h-4 text-cyan-400" />
                 </div>
@@ -473,7 +473,7 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               <button
                 type="button"
                 onClick={() => setActiveTab('soc2')}
-                className={`text-xs font-mono px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                className={`text-xs font-mono px-3 py-1 rounded-md transition-colors cursor-pointer ${
                   activeTab === 'soc2'
                     ? 'bg-cyan-500 text-slate-950 font-bold'
                     : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -483,22 +483,24 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               </button>
             </div>
 
-            <div className="flex items-center justify-between py-3">
-              {renderProgressRing(metrics.soc.progress, 120, 9, '#06b6d4', '#1e293b')}
-              <div className="space-y-2 text-xs font-mono text-slate-300 pl-4">
-                <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between py-2 sm:py-3 gap-4 sm:gap-2">
+              <div className="shrink-0">
+                {renderProgressRing(metrics.soc.progress, 115, 9, '#06b6d4', '#1e293b')}
+              </div>
+              <div className="space-y-1.5 sm:space-y-2 text-xs font-mono text-slate-300 w-full sm:w-auto sm:pl-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0 border-b border-slate-800/40 sm:border-0">
                   <span className="flex items-center gap-1.5 text-emerald-400">
                     <CheckCircle2 className="w-3.5 h-3.5" /> Passed:
                   </span>
                   <span className="font-bold text-white">{metrics.soc.passed} / {metrics.soc.total}</span>
                 </div>
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0 border-b border-slate-800/40 sm:border-0">
                   <span className="flex items-center gap-1.5 text-amber-400">
                     <Clock className="w-3.5 h-3.5" /> In Progress:
                   </span>
                   <span className="font-bold text-white">{metrics.soc.inProgress}</span>
                 </div>
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0">
                   <span className="flex items-center gap-1.5 text-rose-400">
                     <AlertCircle className="w-3.5 h-3.5" /> Remediation:
                   </span>
@@ -515,14 +517,14 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
           {/* Card 2: ISO/IEC 27001:2022 */}
           <div
             id="card-iso-progress"
-            className={`p-6 rounded-2xl border transition-all ${
+            className={`p-5 sm:p-6 rounded-2xl border transition-all ${
               activeTab === 'iso27001'
                 ? 'bg-gradient-to-b from-teal-950/40 to-[#0b0f19] border-teal-500/50 shadow-xl shadow-teal-950/30 ring-1 ring-teal-500/30'
                 : 'bg-[#0b0f19] border-slate-800 hover:border-slate-700'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-teal-950/80 border border-teal-800 flex items-center justify-center">
                   <Lock className="w-4 h-4 text-teal-400" />
                 </div>
@@ -534,7 +536,7 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               <button
                 type="button"
                 onClick={() => setActiveTab('iso27001')}
-                className={`text-xs font-mono px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                className={`text-xs font-mono px-3 py-1 rounded-md transition-colors cursor-pointer ${
                   activeTab === 'iso27001'
                     ? 'bg-teal-400 text-slate-950 font-bold'
                     : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -544,22 +546,24 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               </button>
             </div>
 
-            <div className="flex items-center justify-between py-3">
-              {renderProgressRing(metrics.iso.progress, 120, 9, '#14b8a6', '#1e293b')}
-              <div className="space-y-2 text-xs font-mono text-slate-300 pl-4">
-                <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between py-2 sm:py-3 gap-4 sm:gap-2">
+              <div className="shrink-0">
+                {renderProgressRing(metrics.iso.progress, 115, 9, '#14b8a6', '#1e293b')}
+              </div>
+              <div className="space-y-1.5 sm:space-y-2 text-xs font-mono text-slate-300 w-full sm:w-auto sm:pl-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0 border-b border-slate-800/40 sm:border-0">
                   <span className="flex items-center gap-1.5 text-emerald-400">
                     <CheckCircle2 className="w-3.5 h-3.5" /> Passed:
                   </span>
                   <span className="font-bold text-white">{metrics.iso.passed} / {metrics.iso.total}</span>
                 </div>
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0 border-b border-slate-800/40 sm:border-0">
                   <span className="flex items-center gap-1.5 text-amber-400">
                     <Clock className="w-3.5 h-3.5" /> In Progress:
                   </span>
                   <span className="font-bold text-white">{metrics.iso.inProgress}</span>
                 </div>
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0">
                   <span className="flex items-center gap-1.5 text-rose-400">
                     <AlertCircle className="w-3.5 h-3.5" /> Remediation:
                   </span>
@@ -576,14 +580,14 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
           {/* Card 3: Unified Cross-Framework Compliance Score */}
           <div
             id="card-unified-progress"
-            className={`p-6 rounded-2xl border transition-all ${
+            className={`p-5 sm:p-6 rounded-2xl border transition-all ${
               activeTab === 'all'
                 ? 'bg-gradient-to-b from-cyan-950/30 via-teal-950/20 to-[#0b0f19] border-cyan-500/40 shadow-xl shadow-cyan-950/20 ring-1 ring-cyan-500/20'
                 : 'bg-[#0b0f19] border-slate-800 hover:border-slate-700'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center text-slate-950 font-bold">
                   <Layers className="w-4 h-4 stroke-[2.5]" />
                 </div>
@@ -595,7 +599,7 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               <button
                 type="button"
                 onClick={() => setActiveTab('all')}
-                className={`text-xs font-mono px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                className={`text-xs font-mono px-3 py-1 rounded-md transition-colors cursor-pointer ${
                   activeTab === 'all'
                     ? 'bg-cyan-400 text-slate-950 font-bold'
                     : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -605,18 +609,20 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               </button>
             </div>
 
-            <div className="flex items-center justify-between py-3">
-              {renderProgressRing(metrics.overall.progress, 120, 9, '#38bdf8', '#1e293b')}
-              <div className="space-y-2 text-xs font-mono text-slate-300 pl-4">
-                <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between py-2 sm:py-3 gap-4 sm:gap-2">
+              <div className="shrink-0">
+                {renderProgressRing(metrics.overall.progress, 115, 9, '#38bdf8', '#1e293b')}
+              </div>
+              <div className="space-y-1.5 sm:space-y-2 text-xs font-mono text-slate-300 w-full sm:w-auto sm:pl-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0 border-b border-slate-800/40 sm:border-0">
                   <span className="text-slate-400">Total Controls:</span>
                   <span className="font-bold text-white">{metrics.overall.total}</span>
                 </div>
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0 border-b border-slate-800/40 sm:border-0">
                   <span className="text-emerald-400">Auditor Ready:</span>
                   <span className="font-bold text-white">{metrics.overall.passed}</span>
                 </div>
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-4 py-1 sm:py-0">
                   <span className="text-cyan-400">Audit Window:</span>
                   <span className="font-bold text-white">Q3 / Q4 Cycle</span>
                 </div>
@@ -630,61 +636,64 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
         </div>
 
         {/* Interactive What-If Scenario Toolbar */}
-        <div className="bg-[#0b0f19] rounded-2xl border border-slate-800 p-6 mb-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80">
+        <div className="bg-[#0b0f19] rounded-2xl border border-slate-800 p-4 sm:p-6 mb-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-5 sm:pb-6 border-b border-slate-800/80">
             <div>
               <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Interactive Audit Readiness Simulation</span>
               </div>
-              <h4 className="text-lg font-bold text-white">
+              <h4 className="text-base sm:text-lg font-bold text-white">
                 Simulate Pre-Audit Milestones & Evidence Verification
               </h4>
               <p className="text-xs text-slate-400 mt-1">
-                Click controls below to toggle their status or choose a simulated readiness milestone to observe live progress ring updates.
+                Tap controls to toggle status or select a readiness milestone to see real-time adherence progress rings.
               </p>
             </div>
 
             {/* Scenario Preset Buttons */}
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-3 sm:flex gap-1.5 sm:gap-2 w-full sm:w-auto p-1 bg-slate-950 rounded-xl border border-slate-800 shrink-0">
               <button
                 type="button"
                 onClick={() => applyPresetScenario('current')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
                   readinessStage === 'current'
-                    ? 'bg-slate-800 text-white border border-slate-600'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800'
+                    ? 'bg-slate-800 text-white border border-slate-600 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                1. Initial Gap Audit
+                <span className="hidden sm:inline">1. Initial Gap Audit</span>
+                <span className="sm:hidden">1. Gap Audit</span>
               </button>
               <button
                 type="button"
                 onClick={() => applyPresetScenario('remediated')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
                   readinessStage === 'remediated'
-                    ? 'bg-cyan-950 text-cyan-300 border border-cyan-700'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800'
+                    ? 'bg-cyan-950 text-cyan-300 border border-cyan-700 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                2. Post-Sprint Remediation
+                <span className="hidden sm:inline">2. Post-Remediation</span>
+                <span className="sm:hidden">2. Remediation</span>
               </button>
               <button
                 type="button"
                 onClick={() => applyPresetScenario('pre_audit')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-2 sm:py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer text-center ${
                   readinessStage === 'pre_audit'
-                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-700'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800'
+                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-700 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                3. Audit-Clean
+                <span className="hidden sm:inline">3. Audit-Clean</span>
+                <span className="sm:hidden">3. Audit-Clean</span>
               </button>
             </div>
           </div>
 
           {/* Domain Category Progress Bars */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 pt-5 sm:pt-6">
             {domainBreakdown.map((dom) => {
               const domPercentage =
                 dom.total > 0
@@ -731,9 +740,9 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
           {/* Table Toolbar */}
           <div className="p-4 sm:p-6 border-b border-slate-800 bg-[#090d16] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-mono uppercase text-slate-400 mr-2 flex items-center gap-1.5">
+              <span className="text-xs font-mono uppercase text-slate-400 mr-1 sm:mr-2 flex items-center gap-1.5">
                 <Filter className="w-3.5 h-3.5 text-cyan-400" />
-                Framework:
+                <span>Scope:</span>
               </span>
               <button
                 type="button"
@@ -771,8 +780,8 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
             </div>
 
             {/* Status Filter */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono text-slate-400 hidden sm:inline">Status:</span>
+            <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+              <span className="text-xs font-mono text-slate-400">Status:</span>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as any)}
@@ -786,8 +795,80 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
             </div>
           </div>
 
-          {/* Table Content */}
-          <div className="overflow-x-auto">
+          {/* Mobile Card Feed (Optimized for phones, avoiding horizontal table scroll) */}
+          <div className="sm:hidden divide-y divide-slate-800/60 p-3 space-y-3">
+            {filteredControls.map((ctrl) => (
+              <div
+                key={ctrl.id}
+                className="p-3.5 rounded-xl bg-[#090d16] border border-slate-800/80 space-y-2.5"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-800/60 text-cyan-300 font-mono text-[11px] font-bold">
+                      {ctrl.code}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono uppercase">
+                      {ctrl.framework === 'soc2' ? 'SOC 2' : 'ISO 27001'}
+                    </span>
+                  </div>
+
+                  {/* Touch-Friendly Status Pill */}
+                  <button
+                    type="button"
+                    onClick={() => toggleControlStatus(ctrl.id)}
+                    className="cursor-pointer active:scale-95 transition-transform"
+                    title="Tap to cycle status"
+                  >
+                    {ctrl.status === 'passed' && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-emerald-950/90 border border-emerald-700/80 text-emerald-300">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                        Passed
+                      </span>
+                    )}
+                    {ctrl.status === 'in_progress' && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-amber-950/90 border border-amber-700/80 text-amber-300">
+                        <Clock className="w-3 h-3 text-amber-400" />
+                        In Progress
+                      </span>
+                    )}
+                    {ctrl.status === 'gap' && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-rose-950/90 border border-rose-700/80 text-rose-300">
+                        <AlertCircle className="w-3 h-3 text-rose-400" />
+                        Gap Open
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-white text-xs leading-snug">
+                    {ctrl.title}
+                  </h4>
+                  <div className="text-[11px] text-slate-400 mt-0.5">
+                    Domain: <span className="text-slate-300 font-mono">{ctrl.domain}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-slate-800/60">
+                  <div className="flex items-center gap-1.5 text-slate-400 truncate max-w-[180px]">
+                    <Server className="w-3 h-3 text-cyan-400 shrink-0" />
+                    <span className="truncate">{ctrl.automatedCollector}</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedControl(ctrl)}
+                    className="text-cyan-400 hover:text-cyan-300 underline font-mono text-[11px] cursor-pointer"
+                  >
+                    Inspect Artifact →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop/Tablet Table Content */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-[#05080e] text-[11px] font-mono text-slate-400 uppercase tracking-wider border-b border-slate-800">
                 <tr>
@@ -876,8 +957,8 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
 
           {/* Table Footer / Summary Bar */}
           <div className="p-4 bg-[#070a10] border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="flex items-center gap-2 text-center sm:text-left">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
               <span>Continuous collector poll: Every 6 hours via OpenTofu state & CloudTrail API</span>
             </div>
             <div className="flex items-center gap-4 text-xs font-mono">
@@ -891,11 +972,11 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
               </button>
               <button
                 type="button"
-                onClick={() => onOpenConsultation?.('Export Compliance Evidence Matrix')}
+                onClick={() => onOpenConsultation?.('Export Verified Compliance Matrix')}
                 className="hover:text-cyan-300 text-cyan-400 flex items-center gap-1 transition-colors cursor-pointer"
               >
                 <Download className="w-3 h-3" />
-                Export Audit Matrix
+                Export Matrix
               </button>
             </div>
           </div>
@@ -904,11 +985,11 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
         {/* Modal: Single Control Technical Detail */}
         {selectedControl && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-sm"
             onClick={() => setSelectedControl(null)}
           >
             <div
-              className="bg-[#0b0f19] border border-cyan-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative"
+              className="bg-[#0b0f19] border border-cyan-500/40 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-start justify-between mb-4">
@@ -916,21 +997,22 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
                   <span className="px-2.5 py-0.5 rounded text-xs font-mono bg-cyan-950 border border-cyan-700 text-cyan-300">
                     {selectedControl.code} · {selectedControl.framework.toUpperCase()}
                   </span>
-                  <h3 className="text-lg font-bold text-white mt-2">{selectedControl.title}</h3>
+                  <h3 className="text-base sm:text-lg font-bold text-white mt-2">{selectedControl.title}</h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSelectedControl(null)}
-                  className="text-slate-400 hover:text-white p-1"
+                  className="text-slate-400 hover:text-white p-1 rounded-md"
+                  aria-label="Close modal"
                 >
                   ✕
                 </button>
               </div>
 
-              <div className="space-y-4 text-xs text-slate-300">
+              <div className="space-y-3 sm:space-y-4 text-xs text-slate-300">
                 <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
                   <div className="text-[11px] font-mono text-slate-400 uppercase mb-1">Evidence Collector</div>
-                  <div className="text-white font-mono">{selectedControl.automatedCollector}</div>
+                  <div className="text-white font-mono break-all sm:break-normal">{selectedControl.automatedCollector}</div>
                 </div>
 
                 <div className="p-3 rounded-lg bg-slate-900 border border-slate-800">
@@ -950,14 +1032,14 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-end gap-3">
+              <div className="mt-6 flex flex-col sm:flex-row justify-end gap-2.5 sm:gap-3">
                 <button
                   type="button"
                   onClick={() => {
                     toggleControlStatus(selectedControl.id);
                     setSelectedControl(null);
                   }}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-white cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-white cursor-pointer"
                 >
                   Toggle Status
                 </button>
@@ -967,7 +1049,7 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
                     setSelectedControl(null);
                     onOpenConsultation?.(`Audit Remediation for ${selectedControl.code}: ${selectedControl.title}`);
                   }}
-                  className="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs font-mono cursor-pointer"
                 >
                   Request Remediation SLA
                 </button>
@@ -979,3 +1061,5 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({ onOpenCons
     </section>
   );
 };
+
+export default ComplianceTracker;

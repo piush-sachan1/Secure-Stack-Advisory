@@ -6,25 +6,27 @@ interface ServiceDetailModalProps {
   service: ServiceDetail | null;
   onClose: () => void;
   onBookConsultation: (serviceTitle: string) => void;
+  onSelectRelated?: (serviceId: string) => void;
 }
 
 export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
   service,
   onClose,
   onBookConsultation,
+  onSelectRelated,
 }) => {
   if (!service) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-4xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden my-8 text-slate-100 max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-4xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden my-auto sm:my-8 text-slate-100 max-h-[92vh] sm:max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-6 sm:p-8 bg-slate-950/80 border-b border-slate-800 flex items-start justify-between gap-4 shrink-0">
+        <div className="p-4 sm:p-8 bg-slate-950/80 border-b border-slate-800 flex items-start justify-between gap-3 sm:gap-4 shrink-0">
           <div>
-            <div className="flex items-center gap-2 flex-wrap mb-2">
+            <div className="flex items-center gap-2 flex-wrap mb-1.5 sm:mb-2">
               <span className="px-2.5 py-0.5 rounded text-[11px] font-mono uppercase bg-blue-950/70 border border-blue-800 text-blue-400">
                 Service Specification
               </span>
@@ -32,10 +34,10 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                 Code: SEC-{service.id.toUpperCase()}
               </span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            <h3 className="text-xl sm:text-3xl font-bold text-white tracking-tight">
               {service.title}
             </h3>
-            <p className="text-sm text-slate-300 mt-1">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1">
               {service.tagline}
             </p>
           </div>
@@ -43,7 +45,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0"
+            className="p-1.5 sm:p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -51,7 +53,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         </div>
 
         {/* Scrollable Content Body */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-8 flex-1">
+        <div className="p-4 sm:p-8 overflow-y-auto space-y-6 sm:space-y-8 flex-1">
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {service.tags.map((tag, idx) => (
@@ -138,6 +140,47 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                     <p className="text-xs text-slate-400 leading-relaxed">
                       {item.answer}
                     </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 5. Related Services */}
+          {service.relatedServices && service.relatedServices.length > 0 && (
+            <div className="space-y-3 pt-2">
+              <h4 className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-semibold flex items-center gap-2">
+                <Layers className="w-4 h-4" />
+                5. Related Advisory & Technical Services
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {service.relatedServices.map((related, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between group text-left"
+                  >
+                    <div>
+                      <span className="text-[10px] font-mono uppercase text-cyan-400 tracking-wider font-semibold block mb-1">
+                        {related.practice}
+                      </span>
+                      <h5 className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">
+                        {related.title}
+                      </h5>
+                      <p className="text-[11px] text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                        {related.tagline}
+                      </p>
+                    </div>
+
+                    {onSelectRelated && (
+                      <button
+                        type="button"
+                        onClick={() => onSelectRelated(related.id)}
+                        className="mt-3 pt-2.5 border-t border-slate-800/80 text-[11px] font-medium text-cyan-400 hover:text-cyan-300 flex items-center justify-between transition-colors cursor-pointer w-full"
+                      >
+                        <span>Inspect Specification</span>
+                        <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>

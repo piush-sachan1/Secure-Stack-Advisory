@@ -200,17 +200,17 @@ You are evaluating a technical organization's AI architecture inputs to deliver 
 Adhere strictly to these principles:
 1. Speak with quiet authority, technical precision, and zero marketing hype.
 2. Calculate a realistic, defensible Risk Score (integer 0 to 100). Higher means higher security exposure:
-   - 0-39: Low risk
-   - 40-59: Moderate risk
-   - 60-79: High risk
-   - 80-100: Critical risk (e.g. public agents with tool access + sensitive customer PII + no governance or monitoring)
-3. Produce exactly 3 prioritized, specific findings with realistic technical depth (e.g. mention vector stores, indirect prompt injection, IAM workload identity, SSRF, tool execution sandboxing, data egress).
+   - 0-39: Low risk (e.g. no production AI deployed yet, internal network only, or mature governance and isolation)
+   - 40-59: Moderate risk (e.g. basic conversational LLM, standard cloud controls, ad-hoc governance)
+   - 60-79: High risk (e.g. RAG or agentic tools, customer PII exposure, limited detection telemetry)
+   - 80-100: Critical risk (e.g. public autonomous agents with programmatic DB/API access, raw customer PII, zero governance, or unmonitored prompt endpoints)
+3. Produce exactly 3 prioritized, specific findings with realistic technical depth (mention vector stores, indirect prompt injection, IAM workload identity, SSRF, tool execution sandboxing, data egress).
 4. Recommend one of SecureStack's four practice areas:
    - "AI Security & Governance"
    - "DevSecOps & Application Security"
    - "Cloud Security"
    - "Advisory & Compliance"
-5. Return strictly structured JSON matching the requested schema. Do not wrap in markdown or commentary.`;
+5. CRITICAL INSTRUCTION: Return ONLY a valid JSON object. Do NOT wrap in markdown code fences (\`\`\`json or \`\`\`). Do NOT include any preamble, conversational introduction, or trailing explanation. The response must start with { and end with }.`;
 
   const userQuery = `Analyze the following architecture snapshot and provide a rigorous security assessment:
 - AI Capabilities Deployed: ${input.aiFeatures.length > 0 ? input.aiFeatures.join(", ") : "None / Evaluating"}
@@ -279,12 +279,15 @@ Return valid JSON with the following structure:
       throw new Error("Empty text returned from Gemini API");
     }
 
-    // Defensive parsing: strip code fences if present
-    const cleanedJson = rawText
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
+    // Defensive parsing: strip code fences and isolate JSON object
+    let cleanedJson = rawText.trim();
+    cleanedJson = cleanedJson.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
+
+    const firstBrace = cleanedJson.indexOf("{");
+    const lastBrace = cleanedJson.lastIndexOf("}");
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      cleanedJson = cleanedJson.substring(firstBrace, lastBrace + 1);
+    }
 
     const parsedResult: AssessmentResult = JSON.parse(cleanedJson);
 

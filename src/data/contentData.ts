@@ -7,7 +7,45 @@ import {
   CloudPlatformSpec,
   DevOpsAgilePractice,
   FinOpsOptimizationItem,
+  SocialChannelsConfig,
 } from '../types';
+
+/**
+ * OFFICIAL SOCIAL MEDIA & BROADCAST CHANNELS
+ * -------------------------------------------------------------
+ * You can update the respective channel names and URLs right here,
+ * or manage them live via the "Edit Channels" button in the Footer / Contact section.
+ */
+export const DEFAULT_SOCIAL_CHANNELS: SocialChannelsConfig = {
+  x: {
+    id: 'x',
+    name: '@SecureStackSec',
+    url: 'https://x.com/SecureStackSec',
+    description: 'Real-time CVE threat alerts, cloud incident teardowns & live architecture threads',
+    badge: '34.2K Followers',
+  },
+  instagram: {
+    id: 'instagram',
+    name: '@securestack.cyber',
+    url: 'https://instagram.com/securestack.cyber',
+    description: 'Field notes, zero-day alerts & behind-the-scenes engineering',
+    badge: '18.4K Followers',
+  },
+  facebook: {
+    id: 'facebook',
+    name: 'SecureStack Advisory Group',
+    url: 'https://facebook.com/securestack.advisory',
+    description: 'Executive briefings, enterprise webinars & regulatory updates',
+    badge: 'Official Page',
+  },
+  youtube: {
+    id: 'youtube',
+    name: '@SecureStackArchitecture',
+    url: 'https://youtube.com/@SecureStackArchitecture',
+    description: 'Deep-dive architectural teardowns & live adversarial exploits',
+    badge: '42K Subscribers',
+  },
+};
 
 export const COMPANY_INFO = {
   name: "SecureStack Advisory",
@@ -16,8 +54,9 @@ export const COMPANY_INFO = {
   email: "advisory@securestack.io",
   phone: "+1 (415) 890-4128",
   pgpKeyId: "4A9E 810C 2B77 D30F 99E1",
-  locations: ["San Francisco, CA", "New York, NY", "London, UK"],
+  locations: ["San Francisco, CA", "New York, NY", "London, UK", "Frankfurt, DE"],
   foundedYear: "2019",
+  socials: DEFAULT_SOCIAL_CHANNELS,
 };
 
 export const TRUST_METRICS = [
@@ -224,33 +263,103 @@ export const SERVICES_LIST: ServiceDetail[] = [
         question: "What is the typical engagement duration?",
         answer: "Standard AI Security Assessments run between 2 to 3 weeks depending on the number of model integration points, vector stores, and external tool endpoints.",
       },
+      {
+        question: "How do you evaluate autonomous agent tool-calling loops and API permissions?",
+        answer: "We test whether prompt-guided autonomous agents can be tricked via indirect injection or goal hijacking into calling destructive APIs, bypassing tenant parameters, or exfiltrating backend tokens.",
+      },
+    ],
+    relatedServices: [
+      {
+        id: "devsecops-pipeline",
+        title: "DevSecOps & Application Security",
+        tagline: "Shift-left pipeline gates, supply chain hardening, and automated threat modeling.",
+        practice: "DevSecOps",
+      },
+      {
+        id: "aws-architecture",
+        title: "Cloud Security (AWS & GCP)",
+        tagline: "IAM least-privilege, network isolation, and well-architected cloud defense.",
+        practice: "Cloud Security",
+      },
+      {
+        id: "vciso-advisory",
+        title: "Advisory & Compliance",
+        tagline: "SOC 2, ISO 42001 readiness, control automation, and fractional security leadership.",
+        practice: "Advisory",
+      },
     ],
     tags: ["LLM Threat Modeling", "Prompt Injection", "RAG Security", "NIST AI RMF", "Agent Guardrails"],
   },
   {
     id: "devsecops-pipeline",
     practiceId: "devsecops",
-    title: "DevSecOps & Pipeline Hardening",
-    tagline: "Embed non-blocking security guardrails directly into GitHub, GitLab, and ArgoCD workflows.",
-    shortDescription: "Auditing CI/CD runners, secret sprawl, third-party GitHub Actions provenance, and automated IaC verification gates.",
-    problem: "Developers bypass security tools that generate false-positive noise or slow build times down by 30 minutes. Meanwhile, attacker groups weaponize CI/CD runner environments and software supply chain vulnerabilities.",
+    title: "DevSecOps & Application Security",
+    tagline: "Shift-left security gates, CI/CD pipeline defense, and supply chain vulnerability eradication.",
+    shortDescription: "Eliminate security as an engineering blocker through automated CI/CD pipeline integration, threat modeling, and supply chain defense.",
+    problem: "Traditional security teams operate as gatekeepers, creating friction and friction-induced bypasses that slow product releases. Meanwhile, modern development pipelines are increasingly compromised by pipeline vulnerabilities, poisoned third-party dependencies, malicious CI runners, and credential leakage across GitHub Actions and GitLab CI.",
     methodology: [
-      { phase: "Audit", description: "Review runner topologies, token lifetime defaults, and secret storage practices." },
-      { phase: "Hardening", description: "Configure OpenID Connect (OIDC) to eliminate long-lived cloud keys from CI/CD runners." },
-      { phase: "Automation", description: "Implement pre-commit and PR-level static analysis with low false-positive rule tuning." },
+      {
+        phase: "Phase 1: Supply Chain & Threat Modeling",
+        description: "Conduct systematic architectural threat modeling across code repositories, external libraries, container registries, and runner trust boundaries.",
+      },
+      {
+        phase: "Phase 2: CI/CD Pipeline Integration",
+        description: "Integrate non-blocking security checks directly into GitHub Actions, GitLab CI, and ArgoCD with automated PR review comments and zero false-positive tuning.",
+      },
+      {
+        phase: "Phase 3: Shift-Left Tooling Deployment",
+        description: "Roll out developer-friendly secret scanning, SAST, dependency provenance verification (SLSA/Cosign), and ephemeral environment validation.",
+      },
+      {
+        phase: "Phase 4: Automated Gates & Policy as Code",
+        description: "Implement automated OIDC workload identity, branch protection rules, artifact signing, and deployment gating without stalling developer velocity.",
+      },
     ],
     deliverables: [
-      "Hardened GitHub Actions / GitLab CI pipeline definitions",
-      "OIDC Cloud Provider configuration scripts (AWS IAM / GCP Workload Identity)",
-      "Supply chain provenance validation checklist (SLSA Level 2+)",
+      "Custom Architectural Threat Models covering code-to-cloud attack paths",
+      "Pipeline Security Policy as Code (OPA/Kyverno and GitHub Actions workflows)",
+      "Automated Tool Integration (SAST, SCA, Secrets, Container Scanning) with sub-second feedback loops",
+      "Developer Security Champions Training Curriculum & Hands-on Secure Coding Lab",
     ],
     faq: [
       {
-        question: "Will this slow down our development release cycles?",
-        answer: "No. Our philosophy is zero-friction gates: pre-receive hooks run under 2 seconds, and heavy container analysis runs asynchronously without blocking hotfix branches.",
+        question: "Will automated pipeline gates slow down our deployment velocity or break hotfixes?",
+        answer: "No. Our approach enforces zero-friction gates: pre-commit and PR-level checks complete in under 2 seconds, and heavier dynamic checks run asynchronously. We configure break-glass exception paths for urgent production hotfixes.",
+      },
+      {
+        question: "How do you handle third-party dependency vulnerabilities and software supply chain risks?",
+        answer: "We implement automated Software Bill of Materials (SBOM) generation, cryptographically signed artifacts using Sigstore/Cosign, and vulnerability reachability analysis to distinguish truly exploitable CVEs from harmless transitive dependencies.",
+      },
+      {
+        question: "Can you integrate with our existing GitHub Actions, GitLab CI, or ArgoCD workflows?",
+        answer: "Yes. All our pipeline security policies are authored as native YAML workflows and Open Policy Agent (OPA) rules tailored to your exact source control and CI/CD platform, eliminating long-lived cloud credentials via OIDC federation.",
+      },
+      {
+        question: "What does developer security training look like in practice?",
+        answer: "We conduct hands-on, contextual code-defense workshops using your actual tech stack (e.g. Node.js, Go, Python, Terraform). Engineers exploit real vulnerabilities in sandbox environments and implement native architectural defenses.",
       },
     ],
-    tags: ["CI/CD Security", "OIDC", "Supply Chain", "IaC Scanning", "SLSA"],
+    relatedServices: [
+      {
+        id: "ai-security-review",
+        title: "AI Security & Red Teaming",
+        tagline: "Adversarial evaluation of LLMs, RAG retrieval pipelines, and agentic workflows.",
+        practice: "AI Security",
+      },
+      {
+        id: "aws-architecture",
+        title: "Cloud Security (AWS & GCP)",
+        tagline: "Well-architected reviews, IAM least-privilege, and network microsegmentation.",
+        practice: "Cloud Security",
+      },
+      {
+        id: "vciso-advisory",
+        title: "Advisory & Compliance",
+        tagline: "Pragmatic vCISO guidance, SOC 2 / ISO 27001 readiness, and audit packs.",
+        practice: "Advisory",
+      },
+    ],
+    tags: ["DevSecOps", "CI/CD Security", "Supply Chain", "Threat Modeling", "Shift-Left"],
   },
   {
     id: "appsec-pentest",
@@ -263,10 +372,12 @@ export const SERVICES_LIST: ServiceDetail[] = [
       { phase: "Reconnaissance", description: "API reverse engineering, endpoint enumeration, and authorization state discovery." },
       { phase: "Exploitation", description: "Manual manipulation of tenant tokens, IDOR parameters, and race conditions." },
       { phase: "Reporting", description: "Documented reproductions with curl commands, raw HTTP traces, and fix pull requests." },
+      { phase: "Retesting", description: "Verification of engineer-applied patches and attestation letter signing." },
     ],
     deliverables: [
       "Attestation letter suitable for enterprise customer vendor risk reviews",
       "Comprehensive vulnerability report with CVSS 3.1 scoring and business impact mapping",
+      "Proof-of-Concept exploit code with remediation pull requests",
       "Free retesting of all patched vulnerabilities within 60 days",
     ],
     faq: [
@@ -274,33 +385,105 @@ export const SERVICES_LIST: ServiceDetail[] = [
         question: "Can we use this report for enterprise sales security questionnaires?",
         answer: "Yes. We provide both an executive attestation of testing and a detailed technical report formatted for enterprise procurement teams.",
       },
+      {
+        question: "Do you test GraphQL, gRPC, and WebSocket APIs?",
+        answer: "Yes. We specialize in modern API protocols, inspecting batch authorization bypasses, introspection abuse, and subscription stream leakage.",
+      },
+      {
+        question: "Do you perform greybox testing with source code access?",
+        answer: "Yes, greybox and whitebox testing yield the highest ROI by allowing our offensive team to correlate source logic with runtime API execution.",
+      },
+      {
+        question: "What is your retest policy?",
+        answer: "All remediations are retested at zero additional charge within 60 days of the initial report delivery.",
+      },
+    ],
+    relatedServices: [
+      {
+        id: "devsecops-pipeline",
+        title: "DevSecOps & Application Security",
+        tagline: "Automated pipeline security gates and CI/CD supply chain hardening.",
+        practice: "DevSecOps",
+      },
+      {
+        id: "ai-security-review",
+        title: "AI Security & Red Teaming",
+        tagline: "LLM prompt injection, context poisoning, and agentic red teaming.",
+        practice: "AI Security",
+      },
     ],
     tags: ["BOLA / IDOR", "GraphQL", "Auth0 / Cognito", "API Security", "Manual Pentest"],
   },
   {
     id: "aws-architecture",
     practiceId: "cloud-security",
-    title: "AWS Security Architecture Review",
-    tagline: "Deep audit of AWS Organizations, Service Control Policies, IAM trust graphs, and network isolation.",
-    shortDescription: "Eliminating cross-account compromise paths, excessive IAM permissions, unencrypted storage, and blind spots in GuardDuty / CloudTrail.",
-    problem: "Organizations accumulate sprawling AWS environments with hundreds of IAM roles, orphaned security groups, and incomplete audit logs that fail during incident investigations.",
+    title: "Cloud Security (AWS & GCP)",
+    tagline: "Deep audit of cloud architecture, IAM privilege reduction, network segmentation, and telemetry posture.",
+    shortDescription: "Eliminate cloud misconfiguration, identity sprawl, and compliance drift across multi-account AWS and GCP environments.",
+    problem: "Modern cloud environments suffer from severe identity sprawl: hundreds of orphaned IAM roles, over-permissive wildcard permissions, and unmonitored cross-account STS trust relationships. Combined with configuration drift and blind spots in telemetry, single compromised credentials often grant adversaries unimpeded lateral movement across cloud environments.",
     methodology: [
-      { phase: "Organization Review", description: "Evaluating Root SCPs, AWS Control Tower baselines, and cross-account trust." },
-      { phase: "IAM Graphing", description: "Identifying privilege escalation paths across sts:AssumeRole chains." },
-      { phase: "Data Plane Validation", description: "Auditing S3 bucket policies, KMS key grants, and RDS network accessibility." },
+      {
+        phase: "Phase 1: Well-Architected Cloud Review",
+        description: "Conduct systematic baseline audits of AWS Organizations, GCP Organization hierarchy, Service Control Policies (SCPs), and landing zone isolation.",
+      },
+      {
+        phase: "Phase 2: IAM Least-Privilege Enforcement",
+        description: "Analyze transitive permission graphs to strip wildcard policies, revoke dormant credentials, and transition to short-lived Workload Identity federation.",
+      },
+      {
+        phase: "Phase 3: Network Segmentation & Zero-Trust Egress",
+        description: "Implement micro-segmentation, Transit Gateway routing, and VPC Service Controls (VPC-SC) to prevent data exfiltration during container compromise.",
+      },
+      {
+        phase: "Phase 4: Continuous Posture Monitoring & Telemetry",
+        description: "Tune GuardDuty, Security Hub, and Cloud Security Command Center with automated alerting tested against simulated adversary actions.",
+      },
     ],
     deliverables: [
-      "Visual IAM trust graph highlighting latent privilege escalation chains",
-      "Terraform remediation snippets for IAM and Security Group hardening",
-      "CloudTrail and GuardDuty gap analysis report",
+      "Comprehensive Architecture Security Assessment with visual IAM trust escalation graphs",
+      "IAM Policy Overhaul & Privilege Reduction Map stripping wildcard permissions",
+      "Production-Ready Terraform / OpenTofu IaC Templates for hardened landing zones",
+      "Prioritized 90-Day Cloud Remediation Roadmap with step-by-step implementation milestones",
     ],
     faq: [
       {
-        question: "Do you need admin access to our production AWS accounts?",
-        answer: "No. We utilize a strictly read-only SecurityAudit IAM role with zero data modification or customer data decryption privileges.",
+        question: "Do you require root or administrative access to our production AWS or GCP environments?",
+        answer: "No. We utilize strictly scoped, read-only audit roles (such as AWS SecurityAudit and Google Cloud Viewer) with zero write permissions and no access to customer payload data.",
+      },
+      {
+        question: "How do you ensure IAM policy pruning doesn't cause outages for active workloads?",
+        answer: "We analyze historical CloudTrail and GCP Access Transparency logs over a 90-day window to calculate actual runtime API usage before applying least-privilege boundaries, testing policies in staging first.",
+      },
+      {
+        question: "What cloud security posture management (CSPM) and detection tools do you evaluate?",
+        answer: "We audit and configure native tools (AWS GuardDuty, AWS Security Hub, GCP SCC Premium) as well as commercial CSPMs (Wiz, Orca, Prisma Cloud) to ensure high-fidelity detection rules without alert fatigue.",
+      },
+      {
+        question: "Can you help us remediate findings directly via Terraform or OpenTofu pull requests?",
+        answer: "Yes. Our principals author production-tested Terraform and OpenTofu modules ready for your engineering team to review and merge through normal CI/CD pipelines.",
       },
     ],
-    tags: ["AWS Organizations", "IAM Graphs", "GuardDuty", "KMS", "Terraform"],
+    relatedServices: [
+      {
+        id: "kubernetes-security",
+        title: "Kubernetes & Container Hardening",
+        tagline: "Cluster hardening for EKS, GKE, and container runtime isolation.",
+        practice: "Cloud Security",
+      },
+      {
+        id: "devsecops-pipeline",
+        title: "DevSecOps & Application Security",
+        tagline: "Automated pipeline security gates and CI/CD supply chain hardening.",
+        practice: "DevSecOps",
+      },
+      {
+        id: "vciso-advisory",
+        title: "Advisory & Compliance",
+        tagline: "Pragmatic vCISO guidance, SOC 2 / ISO 27001 readiness, and audit packs.",
+        practice: "Advisory",
+      },
+    ],
+    tags: ["AWS Organizations", "GCP VPC-SC", "IAM Graphs", "Terraform", "Well-Architected"],
   },
   {
     id: "gcp-security",
@@ -313,16 +496,44 @@ export const SERVICES_LIST: ServiceDetail[] = [
       { phase: "Hierarchy Analysis", description: "Review IAM inheritance and Organization Policies at folder and project levels." },
       { phase: "Perimeter Verification", description: "Design and test VPC Service Controls (VPC-SC) perimeters to stop egress." },
       { phase: "Workload Identity", description: "Transition all compute instances and GKE workloads from service account keys to token federation." },
+      { phase: "Continuous Telemetry", description: "Configure Google Cloud SCC Premium and Eventarc alerting for unauthorized role grants." },
     ],
     deliverables: [
       "VPC Service Controls architecture blueprint with dry-run telemetry validation",
-      "Service Account key elimination roadmap",
+      "Service Account key elimination roadmap and Workload Identity federation code",
       "Google Cloud Security Command Center tuning matrix",
+      "BigQuery column-level security and data governance policies",
     ],
     faq: [
       {
         question: "Can VPC-SC be configured without disrupting active production users?",
         answer: "Yes. We use VPC-SC Dry-Run mode and log analysis to validate all legitimate service calls before enforcing hard perimeter boundaries.",
+      },
+      {
+        question: "How do you eliminate static JSON service account keys?",
+        answer: "We migrate service authentication to GCP Workload Identity Federation for external CI/CD runners and Kubernetes Workload Identity for GKE pods.",
+      },
+      {
+        question: "Do you audit BigQuery data access policies?",
+        answer: "Yes, we evaluate Authorized Views, policy tags, and row/column level security rules to prevent broad corporate data exposure.",
+      },
+      {
+        question: "What compliance standards can GCP Organization Policies enforce?",
+        answer: "We configure Org Policies enforcing location constraints (EU sovereign data boundaries), CMEK encryption keys, and disabling external IP allocation.",
+      },
+    ],
+    relatedServices: [
+      {
+        id: "aws-architecture",
+        title: "Cloud Security (AWS & GCP)",
+        tagline: "Multi-account governance, IAM graph analysis, and landing zone hardening.",
+        practice: "Cloud Security",
+      },
+      {
+        id: "kubernetes-security",
+        title: "Kubernetes & Container Hardening",
+        tagline: "GKE cluster isolation, Cilium network policies, and runtime defense.",
+        practice: "Cloud Security",
       },
     ],
     tags: ["VPC Service Controls", "GCP Org Policies", "BigQuery IAM", "Workload Identity"],
@@ -333,21 +544,49 @@ export const SERVICES_LIST: ServiceDetail[] = [
     title: "Kubernetes & Container Hardening",
     tagline: "Cluster hardening for EKS, GKE, and self-managed Kubernetes platforms.",
     shortDescription: "Auditing admission controllers, network policies, runtime telemetry (Falco), and container escape vectors.",
-    problem: "Default Kubernetes installations allow pods to communicate uninhibited across namespaces and access instance metadata services (IMDS), enabling container breakouts to compromise the entire AWS/GCP account.",
+    problem: "Default Kubernetes installations allow pods to communicate uninhibited across namespaces and access instance metadata services (IMDS), enabling container breakouts to compromise the entire cloud account.",
     methodology: [
       { phase: "Control Plane Audit", description: "Review API server flags, etcd encryption, and cluster RBAC assignments." },
       { phase: "Workload Policy", description: "Deploy Kyverno / Gatekeeper policies enforcing read-only root filesystems and non-root users." },
       { phase: "Network Microsegmentation", description: "Implement Calico or Cilium network policies blocking unauthenticated east-west traffic." },
+      { phase: "Runtime Defense", description: "Deploy eBPF-powered runtime detection (Falco/Tetragon) to intercept unauthorized shell spawns." },
     ],
     deliverables: [
       "Production-tested Kyverno / OPA policy definitions",
       "IMDSv2 and metadata endpoint isolation manifests",
-      "RBAC privilege reduction audit log",
+      "RBAC privilege reduction audit log and service account maps",
+      "eBPF runtime security detection rules for zero-day container escapes",
     ],
     faq: [
       {
         question: "Does this apply to managed services like EKS and GKE?",
-        answer: "Yes, managed control planes still leave 80% of cluster security (pod security standards, network policies, IAM node roles) in your hands.",
+        answer: "Yes. Managed control planes handle master node uptime, but leave 80% of cluster security (pod security standards, network policies, node IAM roles) in your hands.",
+      },
+      {
+        question: "Will network policies impact cluster performance?",
+        answer: "No. We leverage eBPF-based Cilium policies which operate at the Linux kernel layer, delivering near-zero latency overhead even at 50,000+ RPS.",
+      },
+      {
+        question: "How do you protect the AWS/GCP instance metadata service (IMDS)?",
+        answer: "We enforce IMDSv2 with hop limits set to 1 and deploy iptables/eBPF filters blocking non-system pods from querying link-local credentials.",
+      },
+      {
+        question: "Can admission controller rules break deployment pipelines?",
+        answer: "We deploy admission rules in 'Audit' mode first, analyzing violation metrics in Prometheus/Datadog for 2 weeks before enforcing hard blocks.",
+      },
+    ],
+    relatedServices: [
+      {
+        id: "aws-architecture",
+        title: "Cloud Security (AWS & GCP)",
+        tagline: "Well-architected reviews, IAM least-privilege, and network microsegmentation.",
+        practice: "Cloud Security",
+      },
+      {
+        id: "devsecops-pipeline",
+        title: "DevSecOps & Application Security",
+        tagline: "Automated pipeline security gates and container vulnerability scanning.",
+        practice: "DevSecOps",
       },
     ],
     tags: ["EKS", "GKE", "Kyverno", "Cilium", "Container Escape Defense"],
@@ -355,27 +594,73 @@ export const SERVICES_LIST: ServiceDetail[] = [
   {
     id: "vciso-advisory",
     practiceId: "advisory-compliance",
-    title: "Technical Advisory & Virtual CISO",
-    tagline: "Senior security engineering leadership tailored for scaleups and growth-stage companies.",
-    shortDescription: "Strategic security roadmaps, board presentation decks, enterprise sales diligence acceleration, and incident response readiness.",
-    problem: "Hiring a full-time CISO costs $450k+ and often results in disconnected governance. Fast-growing software firms need engineering-literate leadership to close enterprise deals and satisfy security audits.",
+    title: "Advisory & Compliance",
+    tagline: "Pragmatic security leadership, SOC 2 / ISO 27001 readiness, and audit readiness acceleration.",
+    shortDescription: "Eliminate compliance overhead and audit panic with dedicated vCISO advisory, evidence automation, and board-level risk management.",
+    problem: "Fast-growing organizations face mounting compliance overhead from enterprise sales questionnaires and impending audit deadlines. Without senior security leadership, companies scramble in panic before audits, burdening engineers with manual evidence collection and adopting generic, disconnected policies that hinder product delivery.",
     methodology: [
-      { phase: "Baseline Assessment", description: "Map current security controls against CIS Critical Security Controls v8." },
-      { phase: "Strategic Roadmap", description: "Prioritize top 5 engineering-led risk reductions over a 90-day horizon." },
-      { phase: "Execution & Oversight", description: "Weekly steering meetings, procurement questionnaire approvals, and red-team drills." },
+      {
+        phase: "Phase 1: Evidence-Based Gap Analysis",
+        description: "Conduct rigorous control assessments against SOC 2, ISO/IEC 27001:2022, and NIST frameworks, evaluating actual cloud and GitHub configurations.",
+      },
+      {
+        phase: "Phase 2: Pragmatic Technical Control Design",
+        description: "Design developer-friendly controls that integrate directly with existing GitOps workflows, replacing manual screenshots with verifiable code.",
+      },
+      {
+        phase: "Phase 3: Dedicated vCISO Advisory & Governance",
+        description: "Provide weekly steering, vendor security assessments, enterprise customer security questionnaire defense, and board-level risk briefings.",
+      },
+      {
+        phase: "Phase 4: Evidence Automation & Auditor Representation",
+        description: "Implement continuous compliance monitoring and directly interface with accredited third-party audit firms to defend your controls.",
+      },
     ],
     deliverables: [
-      "Enterprise Security Whitepaper for your prospective enterprise buyers",
-      "Prioritized 12-month engineering security roadmap",
-      "Executive Board risk briefing deck",
+      "Strategic Compliance Roadmap prioritizing engineering-led risk reductions over 90 and 180 days",
+      "Modular, Developer-Friendly Policy Library (Markdown & Git-tracked) tailored to your operational model",
+      "Audit Readiness Evidence Pack with automated cloud posture scripts",
+      "Executive Board Presentations & Enterprise Sales Security Whitepaper for procurement teams",
     ],
     faq: [
       {
-        question: "How involved are you with our enterprise customer sales calls?",
-        answer: "We join prospective customer security reviews as your acting Head of Security, directly answering architectural questions from enterprise risk teams.",
+        question: "How does a virtual CISO (vCISO) work with our existing engineering and leadership teams?",
+        answer: "Our vCISO principals act as an extension of your leadership team. We attend executive meetings, guide architectural decisions, review vendor contracts, and directly represent your company on enterprise buyer security calls.",
+      },
+      {
+        question: "How fast can we achieve SOC 2 Type I or ISO 27001 readiness?",
+        answer: "With our automated evidence pipelines and pre-engineered policy templates, most SaaS scaleups reach audit-ready posture within 6 to 8 weeks without halting product roadmaps.",
+      },
+      {
+        question: "Do you assist during live auditor interviews and procurement security questionnaires?",
+        answer: "Yes. We directly participate in auditor walkthroughs and complete enterprise vendor risk assessments (SIG, CAIQ, custom customer questionnaires) on your behalf.",
+      },
+      {
+        question: "How do you prevent compliance from becoming a manual spreadsheet burden?",
+        answer: "We replace manual evidence collection with automated infrastructure-as-code assertions, connecting your cloud APIs, identity providers, and CI/CD tools to continuous monitoring systems.",
       },
     ],
-    tags: ["vCISO", "Enterprise Sales Diligence", "Board Reporting", "CIS Controls"],
+    relatedServices: [
+      {
+        id: "soc2-compliance",
+        title: "SOC 2 & ISO 27001 Readiness",
+        tagline: "Automated audit defense, policy-as-code, and continuous evidence validation.",
+        practice: "Advisory",
+      },
+      {
+        id: "aws-architecture",
+        title: "Cloud Security (AWS & GCP)",
+        tagline: "Multi-cloud architecture, IAM governance, and sovereign data controls.",
+        practice: "Cloud Security",
+      },
+      {
+        id: "devsecops-pipeline",
+        title: "DevSecOps & Application Security",
+        tagline: "Automated pipeline security gates and CI/CD supply chain hardening.",
+        practice: "DevSecOps",
+      },
+    ],
+    tags: ["vCISO", "SOC 2", "ISO 27001", "Board Reporting", "Audit Defense"],
   },
   {
     id: "soc2-compliance",
@@ -388,16 +673,44 @@ export const SERVICES_LIST: ServiceDetail[] = [
       { phase: "Gap Analysis", description: "Evaluate existing Terraform, GitHub, and cloud configurations against Trust Services Criteria." },
       { phase: "Policy & Code Mapping", description: "Draft developer-friendly security policies and wire automated CI/CD evidence pipelines." },
       { phase: "Audit Defense", description: "Directly represent your technical controls to AICPA-accredited auditors during the audit window." },
+      { phase: "Continuous Assurance", description: "Establish automated alerting when cloud configurations drift from certified control baselines." },
     ],
     deliverables: [
       "Complete set of tailored, modern security policies (MD / Git-tracked)",
       "Automated evidence collection hooks into your cloud environment",
       "Auditor negotiation and deficiency remediation defense",
+      "Continuous compliance monitoring dashboard integration",
     ],
     faq: [
       {
         question: "Do you integrate with compliance platforms like Vanta or Drata?",
         answer: "Yes, we frequently configure and tune platforms like Vanta, Drata, and Secureframe to ensure tests pass without generating endless false alerts for developers.",
+      },
+      {
+        question: "What is the difference between SOC 2 Type I and Type II?",
+        answer: "Type I validates the design of your security controls at a single point in time. Type II audits their operational effectiveness over a testing window (typically 3, 6, or 12 months).",
+      },
+      {
+        question: "Can we achieve SOC 2 and ISO 27001 concurrently?",
+        answer: "Yes. Because 85% of controls overlap between AICPA Trust Services Criteria and ISO 27001 Annex A, we cross-map evidence to achieve both certifications simultaneously.",
+      },
+      {
+        question: "What happens if an auditor finds a control deficiency?",
+        answer: "We work directly with your team to implement an immediate compensating control and draft an auditor-approved remediation response before report finalization.",
+      },
+    ],
+    relatedServices: [
+      {
+        id: "vciso-advisory",
+        title: "Advisory & Compliance",
+        tagline: "Dedicated vCISO leadership, board reporting, and enterprise sales diligence.",
+        practice: "Advisory",
+      },
+      {
+        id: "aws-architecture",
+        title: "Cloud Security (AWS & GCP)",
+        tagline: "Multi-cloud architecture, IAM governance, and sovereign data controls.",
+        practice: "Cloud Security",
       },
     ],
     tags: ["SOC 2 Type II", "ISO 27001:2022", "Audit Defense", "Automated Evidence"],
@@ -410,6 +723,7 @@ export const CONSULTANTS: ConsultantProfile[] = [
     role: "Founding Principal & AI Security Practice Lead",
     location: "San Francisco, CA",
     avatarSeed: "MV",
+    imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
     bio: "Former Principal Offensive Security Engineer at leading hyperscalers. Specializes in LLM parameter inversion, agentic function calling exploitation, and container isolation architectures.",
     certifications: ["CISSP", "OSCP", "AWS Security Specialty", "NIST AI RMF Fellow"],
     specialties: ["Agentic Threat Modeling", "Prompt Injection Red Teaming", "Cloud IAM Graphs"],
@@ -420,6 +734,7 @@ export const CONSULTANTS: ConsultantProfile[] = [
     role: "Cloud Infrastructure & DevSecOps Principal",
     location: "New York, NY",
     avatarSeed: "ER",
+    imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
     bio: "Seasoned infrastructure engineer and Kubernetes contributor. Advises enterprise CISOs on multi-account AWS/GCP boundary engineering and zero-trust CI/CD deployment security.",
     certifications: ["CCSP", "CKS (Certified Kubernetes Security)", "GCP Professional Cloud Architect"],
     specialties: ["Kubernetes Hardening", "GCP VPC-SC", "OIDC CI/CD Pipelines", "IaC Verification"],
@@ -430,6 +745,7 @@ export const CONSULTANTS: ConsultantProfile[] = [
     role: "Advisory & Governance Practice Lead",
     location: "London, UK",
     avatarSeed: "DC",
+    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
     bio: "Pragmatic security strategist bridging technical vulnerability remediation with board-level fiduciary oversight. Has guided over 80 high-growth software firms through successful SOC 2 and ISO 27001 certifications.",
     certifications: ["CISM", "ISO 27001 Lead Auditor", "CISSP", "CISA"],
     specialties: ["Technical vCISO", "Enterprise Diligence Acceleration", "Incident Response Playbooks"],
@@ -517,6 +833,7 @@ export const INSIGHTS: InsightPost[] = [
     category: "AI Security Research",
     publishDate: "August 2026",
     readTime: "8 min read",
+    imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
     summary: "When LLMs are granted access to external APIs or internal microservices, indirect prompt injection becomes remote code execution. Here is how to architect deterministic execution sandboxes.",
     author: {
       name: "Marcus Vance",
@@ -535,6 +852,7 @@ export const INSIGHTS: InsightPost[] = [
     category: "Cloud Security Architecture",
     publishDate: "July 2026",
     readTime: "11 min read",
+    imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
     summary: "Service account keys remain the #1 compromised credential vector in Google Cloud. A technical blueprint for eliminating static JSON keys across EKS and GKE clusters.",
     author: {
       name: "Elena Rostova",
@@ -553,6 +871,7 @@ export const INSIGHTS: InsightPost[] = [
     category: "AI Vulnerability Analysis",
     publishDate: "June 2026",
     readTime: "9 min read",
+    imageUrl: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
     summary: "Vector databases index text without inherent authorization semantics. We dissect how cross-tenant document poisoning allows unprivileged users to extract confidential data.",
     author: {
       name: "Marcus Vance & Devon Chen",
