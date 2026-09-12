@@ -1,7 +1,19 @@
 import React from 'react';
 import { COMPANY_INFO } from '../data/contentData';
-import { ShieldCheck, Lock, Terminal, ArrowUpRight, Instagram, Facebook, Youtube, ExternalLink, Settings, Sparkles } from 'lucide-react';
+import {
+  ShieldCheck,
+  Lock,
+  ArrowUpRight,
+  Instagram,
+  Facebook,
+  Youtube,
+  ExternalLink,
+  Settings,
+  Globe,
+  Check,
+} from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { SupportedLanguage } from '../types';
 
 interface FooterProps {
   onSelectServiceTitle: (title: string) => void;
@@ -15,7 +27,13 @@ const XIcon: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) 
 );
 
 export const Footer: React.FC<FooterProps> = ({ onSelectServiceTitle, onNavigateSection }) => {
-  const { channels, setIsChannelModalOpen, t } = useApp();
+  const { channels, setIsChannelModalOpen, t, language, setLanguage } = useApp();
+
+  const languagesList: { code: SupportedLanguage; label: string; flag: string; target: string }[] = [
+    { code: 'en', label: 'English', flag: '🇬🇧', target: 'Global / US' },
+    { code: 'de', label: 'Deutsch', flag: '🇩🇪', target: 'DACH / EU' },
+    { code: 'fr', label: 'Français', flag: '🇫🇷', target: 'France / NIS-2' },
+  ];
 
   return (
     <footer className="bg-[#05070a] text-slate-400 text-xs border-t border-slate-800/80">
@@ -325,21 +343,57 @@ export const Footer: React.FC<FooterProps> = ({ onSelectServiceTitle, onNavigate
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 text-center sm:text-left">
-          <div className="flex items-center gap-2 justify-center sm:justify-start">
-            <Lock className="w-3.5 h-3.5 text-slate-600 shrink-0" />
-            <span>
-              &copy; {new Date().getFullYear()} {COMPANY_INFO.name}. {t.footer.rightsReserved}
-            </span>
+        {/* Bottom Bar with Language Switcher */}
+        <div className="pt-6 border-t border-slate-900/90 space-y-4">
+          {/* Language Switcher Bar at the downside */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-3 rounded-xl bg-slate-950/90 border border-slate-800/90">
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
+              <Globe className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span className="font-semibold text-white">Language / Market:</span>
+              <span className="text-slate-400 text-[11px] hidden sm:inline">
+                • Active Region: {languagesList.find((l) => l.code === language)?.target}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 flex-wrap justify-center">
+              {languagesList.map((lang) => {
+                const isSelected = language === lang.code;
+                return (
+                  <button
+                    key={lang.code}
+                    type="button"
+                    onClick={() => setLanguage(lang.code)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isSelected
+                        ? 'bg-cyan-950 text-cyan-300 font-bold border border-cyan-500/50 shadow-sm shadow-cyan-950'
+                        : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+                    }`}
+                  >
+                    <span>{lang.flag}</span>
+                    <span>{lang.label}</span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1">
-            <span className="hover:text-slate-400 cursor-pointer">{t.footer.responsibleDisclosure}</span>
-            <span>•</span>
-            <span className="hover:text-slate-400 cursor-pointer">{t.footer.securityPrivacy}</span>
-            <span>•</span>
-            <span className="hover:text-slate-400 cursor-pointer">{t.footer.termsEngagement}</span>
+          {/* Copyright Line */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 text-center sm:text-left pt-1">
+            <div className="flex items-center gap-2 justify-center sm:justify-start">
+              <Lock className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+              <span>
+                &copy; {new Date().getFullYear()} {COMPANY_INFO.name}. {t.footer.rightsReserved}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1">
+              <span className="hover:text-slate-400 cursor-pointer">{t.footer.responsibleDisclosure}</span>
+              <span>•</span>
+              <span className="hover:text-slate-400 cursor-pointer">{t.footer.securityPrivacy}</span>
+              <span>•</span>
+              <span className="hover:text-slate-400 cursor-pointer">{t.footer.termsEngagement}</span>
+            </div>
           </div>
         </div>
       </div>

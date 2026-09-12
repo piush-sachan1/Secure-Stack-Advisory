@@ -65,7 +65,7 @@ function AppContent() {
   const [currentSection, setCurrentSection] = useState<AppSection>('overview');
   const [selectedService, setSelectedService] = useState<ServiceDetail | null>(null);
   const [selectedFilterPractice, setSelectedFilterPractice] = useState<string | null>(null);
-  const [activeComplianceTab, setActiveComplianceTab] = useState<'all' | 'soc2' | 'pci' | 'cis' | 'iso27001'>('all');
+  const [activeComplianceTab, setActiveComplianceTab] = useState<'all' | 'soc2' | 'pci' | 'cis' | 'hipaa' | 'iso27001'>('all');
   const [prefilledConsultation, setPrefilledConsultation] = useState<{
     score: number;
     tier: string;

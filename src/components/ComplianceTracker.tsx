@@ -26,7 +26,7 @@ interface ControlItem {
   code: string;
   title: string;
   domain: string;
-  framework: 'soc2' | 'pci' | 'cis' | 'iso27001' | 'both';
+  framework: 'soc2' | 'pci' | 'cis' | 'hipaa' | 'iso27001' | 'both';
   status: 'passed' | 'in_progress' | 'gap';
   automatedCollector: string;
   evidenceSource: string;
@@ -261,12 +261,58 @@ const INITIAL_CONTROLS: ControlItem[] = [
     evidenceSource: 'Multi-region failover drill scheduled for Q3 audit cycle',
     criticality: 'High',
   },
+
+  // HIPAA Security Rule Controls
+  {
+    id: 'hipaa-164312a',
+    code: 'HIPAA-164.312(a)',
+    title: 'ePHI Technical Access Control & Automated Session Timeout',
+    domain: 'ePHI Data Protection',
+    framework: 'hipaa',
+    status: 'passed',
+    automatedCollector: 'Azure Entra ID / AWS IAM / Okta BAA Ingestion',
+    evidenceSource: 'Enforced 15-min idle disconnect & AES-256 ePHI volume encryption',
+    criticality: 'Critical',
+  },
+  {
+    id: 'hipaa-164312b',
+    code: 'HIPAA-164.312(b)',
+    title: 'ePHI Audit Controls, Log Immutability & Access Telemetry',
+    domain: 'Audit & Telemetry',
+    framework: 'hipaa',
+    status: 'passed',
+    automatedCollector: 'AWS CloudTrail / Azure Monitor / GCP Cloud Audit Logs',
+    evidenceSource: 'WORM immutable ePHI bucket audit logs with automated tamper alerts',
+    criticality: 'Critical',
+  },
+  {
+    id: 'hipaa-164312e',
+    code: 'HIPAA-164.312(e)',
+    title: 'Transmission Security & Mandatory TLS 1.3 Cryptography',
+    domain: 'Data Protection',
+    framework: 'hipaa',
+    status: 'passed',
+    automatedCollector: 'AWS Certificate Manager / Azure Key Vault / Cloudflare',
+    evidenceSource: '100% TLS 1.3 enforcement across all API endpoints with zero HTTP fallback',
+    criticality: 'High',
+  },
+  {
+    id: 'hipaa-164308a',
+    code: 'HIPAA-164.308(a)',
+    title: 'Business Associate Agreement (BAA) & Third-Party Risk Audits',
+    domain: 'Governance & Audit',
+    framework: 'hipaa',
+    status: 'in_progress',
+    automatedCollector: 'Vendor Risk Platform / AWS Security Hub',
+    evidenceSource: 'Fully executed BAAs for all cloud infrastructure & SaaS subprocessors',
+    criticality: 'Critical',
+  },
 ];
 
 interface ComplianceTrackerProps {
   onOpenConsultation?: (topic?: string) => void;
   isLoading?: boolean;
-  activeFrameworkTab?: 'all' | 'soc2' | 'pci' | 'cis' | 'iso27001';
+  activeFrameworkTab?: 'all' | 'soc2' | 'pci' | 'cis' | 'hipaa' | 'iso27001';
 }
 
 export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({
@@ -274,7 +320,7 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({
   isLoading = false,
   activeFrameworkTab = 'all',
 }) => {
-  const [activeTab, setActiveTab] = useState<'all' | 'soc2' | 'pci' | 'cis' | 'iso27001'>(activeFrameworkTab);
+  const [activeTab, setActiveTab] = useState<'all' | 'soc2' | 'pci' | 'cis' | 'hipaa' | 'iso27001'>(activeFrameworkTab);
   const [controls, setControls] = useState<ControlItem[]>(INITIAL_CONTROLS);
   const [statusFilter, setStatusFilter] = useState<'all' | 'passed' | 'in_progress' | 'gap'>('all');
   const [selectedControl, setSelectedControl] = useState<ControlItem | null>(null);
@@ -378,11 +424,9 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({
   // Domain breakdown
   const domainBreakdown: DomainProgress[] = useMemo(() => {
     const activeControls =
-      activeTab === 'soc2'
-        ? controls.filter((c) => c.framework === 'soc2')
-        : activeTab === 'iso27001'
-        ? controls.filter((c) => c.framework === 'iso27001')
-        : controls;
+      activeTab === 'all'
+        ? controls
+        : controls.filter((c) => c.framework === activeTab || c.framework === 'both');
 
     const domainsMap: Record<string, ControlItem[]> = {};
     activeControls.forEach((c) => {
@@ -847,6 +891,17 @@ export const ComplianceTracker: React.FC<ComplianceTrackerProps> = ({
                 }`}
               >
                 CIS Controls ({controls.filter((c) => c.framework === 'cis').length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('hipaa')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
+                  activeTab === 'hipaa'
+                    ? 'bg-cyan-500 text-slate-950'
+                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`}
+              >
+                HIPAA ({controls.filter((c) => c.framework === 'hipaa').length})
               </button>
               <button
                 type="button"

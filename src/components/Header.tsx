@@ -32,7 +32,7 @@ interface HeaderProps {
   onNavigate: (section: AppSection, targetAnchor?: string) => void;
   onBookClick: () => void;
   onSelectPractice?: (practiceId: string) => void;
-  onSelectComplianceTab?: (tab: 'all' | 'soc2' | 'pci' | 'cis' | 'iso27001') => void;
+  onSelectComplianceTab?: (tab: 'all' | 'soc2' | 'pci' | 'cis' | 'hipaa' | 'iso27001') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -451,6 +451,22 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => {
+                      onSelectComplianceTab?.('hipaa');
+                    }}
+                    className="p-3 rounded-xl bg-slate-900/60 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/40 text-left transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 text-xs font-bold text-white group-hover:text-emerald-300 mb-1">
+                      <Shield className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                      <span>HIPAA Security Rule</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      ePHI technical access controls, BAA risk management & immutable access logs.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
                       onSelectComplianceTab?.('iso27001');
                     }}
                     className="p-3 rounded-xl bg-slate-900/60 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/40 text-left transition-all group cursor-pointer"
@@ -736,79 +752,8 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </nav>
 
-        {/* Header Action Buttons & Language Switcher */}
+        {/* Header Action Buttons */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Desktop Language Switcher */}
-          <div className="relative" ref={langDropdownRef}>
-            <button
-              type="button"
-              onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-              className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-lg text-xs font-mono text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800/90 border border-slate-700/80 hover:border-cyan-500/50 transition-all cursor-pointer shadow-sm"
-              aria-label="Select portal language and international market"
-              aria-expanded={langDropdownOpen}
-              title={`Active Market: ${currentLangObj.target}`}
-            >
-              <Globe className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-xs">{currentLangObj.flag}</span>
-              <span className="font-bold text-[11px] text-white uppercase">{currentLangObj.code}</span>
-              <ChevronDown className="w-3 h-3 text-slate-400" />
-            </button>
-
-            {/* Language Switcher Dropdown Menu */}
-            {langDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-72 rounded-xl bg-[#0b0f19] border border-cyan-500/40 shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95">
-                <div className="px-2.5 py-1.5 border-b border-slate-800/80 mb-1">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-semibold block">
-                    {t.header.switchPrompt}
-                  </span>
-                  <span className="text-[11px] text-slate-400 block mt-0.5">
-                    Targeting European & Global Cyber Regulations
-                  </span>
-                </div>
-
-                <div className="space-y-1">
-                  {languagesList.map((lang) => {
-                    const isSelected = language === lang.code;
-                    return (
-                      <button
-                        key={lang.code}
-                        type="button"
-                        onClick={() => handleSelectLanguage(lang.code)}
-                        className={`w-full text-left p-2 rounded-lg transition-all flex items-start justify-between gap-2 cursor-pointer ${
-                          isSelected
-                            ? 'bg-cyan-950/60 border border-cyan-500/40 text-white'
-                            : 'hover:bg-slate-800/60 text-slate-300 hover:text-white border border-transparent'
-                        }`}
-                      >
-                        <div className="flex items-start gap-2.5">
-                          <span className="text-base mt-0.5">{lang.flag}</span>
-                          <div>
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-xs font-semibold font-sans">{lang.label}</span>
-                              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-cyan-300">
-                                {lang.code.toUpperCase()}
-                              </span>
-                            </div>
-                            <span className="text-[10px] font-mono text-slate-400 block mt-0.5">
-                              {lang.target}
-                            </span>
-                          </div>
-                        </div>
-
-                        {isSelected && <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-1" />}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-2 pt-2 border-t border-slate-800/80 px-2 py-1 text-[10px] font-mono text-slate-500 flex items-center justify-between">
-                  <span>Current: {t.marketBadge}</span>
-                  <span className="text-emerald-400">● Real-time</span>
-                </div>
-              </div>
-            )}
-          </div>
-
           {/* Book Review CTA */}
           <button
             type="button"
@@ -955,6 +900,16 @@ export const Header: React.FC<HeaderProps> = ({
                     className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
                   >
                     CIS Controls
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSelectComplianceTab?.('hipaa');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="p-2 rounded-lg bg-slate-950 border border-slate-800 text-slate-200 text-left"
+                  >
+                    HIPAA Security
                   </button>
                   <button
                     type="button"
